@@ -8,10 +8,10 @@ export default function Aside() {
       <nav>
         <ul className="hidden md:flex flex-col items-left justify-center gap-4 mt-4">
           <li>
-            <MenuItem href="/" label="Home" />
+            <MenuItem href="/authenticated/home" label="Home" />
           </li>
           <li>
-            <MenuItem href="/profile" label="Meu Perfil" />
+            <MenuItem href="/authenticated/profile" label="Meu Perfil" />
           </li>
         </ul>
       </nav>

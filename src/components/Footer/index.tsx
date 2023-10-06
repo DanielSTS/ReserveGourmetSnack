@@ -5,7 +5,7 @@ export default function Footer() {
     <footer className="flex flex-col gap-2 py-2 items-center justify-around">
       <Image
         className={'w-96 h-24 text-redMain'}
-        src={'admin.svg'}
+        src={'/admin-red.svg'}
         alt="Logo"
         width={140}
         height={140}

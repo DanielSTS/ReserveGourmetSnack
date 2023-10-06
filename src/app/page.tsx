@@ -1,5 +1,5 @@
-import Home from '@/components/Home';
+import Register from '@/components/Register';
 
-export default function PageHome() {
-  return <Home />;
+export default function PageRegister() {
+  return <Register />;
 }
