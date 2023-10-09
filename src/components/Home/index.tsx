@@ -1,6 +1,6 @@
-import Favorites from "../Favorites";
-import MyReserves from "../MyReserves";
-import Restaurants from "../Restaurants";
+import Favorites from '../Favorites';
+import MyReserves from '../MyReserves';
+import Restaurants from '../Restaurants';
 
 export default function Home() {
   return (

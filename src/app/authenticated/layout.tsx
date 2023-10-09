@@ -8,7 +8,7 @@ export default function Layout({ children }: { children: ReactNode }) {
     <>
       <Header />
       <div className="flex flex-1">
-          <Aside />
+        <Aside />
         <main className="flex-1">{children}</main>
       </div>
     </>

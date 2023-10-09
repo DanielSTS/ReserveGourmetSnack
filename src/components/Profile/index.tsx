@@ -9,7 +9,7 @@ export default function Profile() {
         }
       >
         <div className="bg-white shadow-md rounded m-auto h-auto flex">
-            <div className="p-16 rounded shadow py-16 flex flex-col gap-4">
+          <div className="p-16 rounded shadow py-16 flex flex-col gap-4">
             <h2 className="text-2xl font-bold mb-8 text-center text-redMain">
               Atualizar dados
             </h2>
