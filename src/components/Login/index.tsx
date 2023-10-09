@@ -51,7 +51,7 @@ export default function Login() {
           <div className="flex items-center justify-between">
             <Link
               className="border-2 border-white bg-redMain text-white font-bold p-2 px-8 rounded-3xl focus:outline-none focus:shadow-outline"
-              href="/authenticated/profile"
+              href="/authenticated/home"
             >
               Entrar
             </Link>

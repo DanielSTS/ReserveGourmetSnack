@@ -51,12 +51,12 @@ export default function Register() {
             />
           </div>
           <div className="flex items-center justify-between">
-            <button
+            <Link
               className="border-2 border-white bg-redMain text-white font-bold p-2 px-8 rounded-3xl focus:outline-none focus:shadow-outline"
-              type="button"
+              href="/login"
             >
               Cadastre-se
-            </button>
+            </Link>
           </div>
         </form>
       </div>

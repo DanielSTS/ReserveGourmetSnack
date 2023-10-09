@@ -7,7 +7,7 @@ export default function Header() {
   return (
     <header className="flex items-center justify-between px-4 py-2 bg-redMain">
       <Image src={'/logo.svg'} alt="Logo" width={60} height={50} />
-      <Link className="text-white text-xl" href={'/'}>
+      <Link className="text-white text-xl" href={'/login'}>
         <CgLogOut />
       </Link>
     </header>
