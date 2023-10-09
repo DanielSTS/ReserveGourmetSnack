@@ -1,13 +1,19 @@
+import Favorites from "../Favorites";
+import MyReserves from "../MyReserves";
+import Restaurants from "../Restaurants";
+
 export default function Home() {
   return (
-    <>
-      <section
-        className={
-          'flex flex-col gap-4 px-12 pt-12 items-center justify-around text-center'
-        }
-      >
-        <h1 className={'text-5xl font-bold'}>Home</h1>
-      </section>
-    </>
+    <div className="grid grid-cols-2 h-screen">
+      <div className="col-span-2 md:col-span-1">
+        <MyReserves />
+      </div>
+      <div className="col-span-2 md:col-span-1">
+        <Favorites />
+      </div>
+      <div className="col-span-2 md:col-span-2">
+        <Restaurants />
+      </div>
+    </div>
   );
 }

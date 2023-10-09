@@ -4,7 +4,7 @@ import Footer from '../Footer';
 
 export default function Aside() {
   return (
-    <aside className="flex flex-col justify-between h-screen bg-main w-64">
+    <aside className="flex flex-col justify-between h-screen bg-main w-52">
       <nav>
         <ul className="hidden md:flex flex-col items-left justify-center gap-4 mt-4">
           <li>
