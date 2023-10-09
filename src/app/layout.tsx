@@ -18,9 +18,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           'bg-background text-white md:mx-auto xl:max-w-screen-2xl flex flex-col min-h-screen'
         }
       >
-        <MenuMobileContextProvider>
-        {children}
-        </MenuMobileContextProvider>
+        <MenuMobileContextProvider>{children}</MenuMobileContextProvider>
       </body>
     </html>
   );

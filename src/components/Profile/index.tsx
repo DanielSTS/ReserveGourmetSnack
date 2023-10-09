@@ -7,7 +7,6 @@ export default function Profile() {
         }
       >
         <h1 className={'text-5xl font-bold'}>Meu Perfil</h1>
-       
       </section>
     </>
   );
