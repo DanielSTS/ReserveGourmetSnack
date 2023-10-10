@@ -5,14 +5,14 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { useState } from 'react';
-import { useReservationsContext } from '@/contexts/ReservationsContext';
+import { useUserInfoContext } from '@/contexts/UserInfoContext';
 import axios from 'axios';
 
 export default function MyReserves() {
   const [openModalDelete, setOpenModalDelete] = useState(false);
   const [openModalEdit, setOpenModalEdit] = useState(false);
   const [selectedRow, setSelectedRow] = useState<string>('');
-  const reservationsData = useReservationsContext();
+  const { reservations: reservationsData} = useUserInfoContext();
 
   const [editedReservation, setEditedReservation] = useState({
     id: '',
@@ -71,25 +71,26 @@ export default function MyReserves() {
     setSelectedRow('');
   }
 
-  function handleEditConfirm(): void {
+  function handleEditConfirm(event: any): void {
+    event.preventDefault();
+    const data = {
+      id: editedReservation.id,
+      datetime: editedReservation.datetime,
+      numPeople: editedReservation.numPeople,
+      observation: editedReservation.observation
+    };
     axios
-    .put('http://localhost:3001/reservations', {
-      headers: {
-        Authorization: localStorage.getItem('token')
-      },
-      data: {
-        id: selectedRow,
-        datetime: editedReservation.datetime,
-        numPeople: editedReservation.numPeople,
-        observation: editedReservation.observation
-      }
-    })
-    .then(() => {
-     console.log('ok')
-    })
-    .catch(error => {
-      console.log('error ', error);
-    });
+      .put('http://localhost:3001/reservations', data, {
+        headers: {
+          Authorization: localStorage.getItem('token')
+        }
+      })
+      .then(() => {
+        console.log('ok');
+      })
+      .catch(error => {
+        console.log('error ', error);
+      });
     setOpenModalEdit(false);
     setSelectedRow('');
   }
@@ -115,7 +116,7 @@ export default function MyReserves() {
         }
       })
       .then(() => {
-       console.log('ok')
+        console.log('ok');
       })
       .catch(error => {
         console.log('error ', error);
@@ -163,7 +164,10 @@ export default function MyReserves() {
         <div className="fixed inset-0 flex items-center justify-center">
           <div className="p-4 bg-white rounded shadow  text-center flex flex-col gap-24">
             <h1 className="text-redMain text-2xl">Editar Reserva</h1>
-            <form className="flex flex-col gap-6 items-center">
+            <form
+              className="flex flex-col gap-6 items-center"
+              onSubmit={handleEditConfirm}
+            >
               <div className="">
                 <input
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -171,10 +175,12 @@ export default function MyReserves() {
                   type="number"
                   placeholder="Quantidade"
                   value={editedReservation.numPeople}
-                  onChange={e => setEditedReservation(prevState => ({
-                    ...prevState,
-                    numPeople: parseInt(e.target.value, 10)
-                  }))}
+                  onChange={e =>
+                    setEditedReservation(prevState => ({
+                      ...prevState,
+                      numPeople: parseInt(e.target.value, 10)
+                    }))
+                  }
                 />
               </div>
               <div className="">
@@ -184,10 +190,12 @@ export default function MyReserves() {
                   type="text"
                   placeholder="Observações"
                   value={editedReservation.observation}
-                  onChange={e => setEditedReservation(prevState => ({
-                    ...prevState,
-                    observation: e.target.value
-                  }))}
+                  onChange={e =>
+                    setEditedReservation(prevState => ({
+                      ...prevState,
+                      observation: e.target.value
+                    }))
+                  }
                 />
               </div>
               <div className="mb-4">
@@ -196,28 +204,34 @@ export default function MyReserves() {
                   id="calendar"
                   type="datetime-local"
                   placeholder="Data"
-                  value={editedReservation.datetime instanceof Date ? editedReservation.datetime.toISOString().slice(0, 16) : ''}
-                  onChange={e => setEditedReservation(prevState => ({
-                    ...prevState,
-                    datetime: new Date(e.target.value)
-                  }))}
+                  value={
+                    editedReservation.datetime instanceof Date
+                      ? editedReservation.datetime.toISOString().slice(0, 16)
+                      : ''
+                  }
+                  onChange={e =>
+                    setEditedReservation(prevState => ({
+                      ...prevState,
+                      datetime: new Date(e.target.value)
+                    }))
+                  }
                 />
               </div>
+              <div className="flex justify-between gap-6">
+                <button
+                  onClick={handleEditCancel}
+                  className="border-2 border-zinc-400 bg-white text-zinc-400 font-bold p-2 px-8 rounded-3xl focus:outline-none focus:shadow-outline"
+                >
+                  Cancelar
+                </button>
+                <button
+                  type="submit"
+                  className="border-2 border-white bg-redMain text-white font-bold p-2 px-8 rounded-3xl focus:outline-none focus:shadow-outline"
+                >
+                  Criar
+                </button>
+              </div>
             </form>
-            <div className="flex justify-between gap-6">
-              <button
-                onClick={handleEditConfirm}
-                className="border-2 border-zinc-400 bg-white text-zinc-400 font-bold p-2 px-8 rounded-3xl focus:outline-none focus:shadow-outline"
-              >
-                Cancelar
-              </button>
-              <button
-                onClick={handleEditCancel}
-                className="border-2 border-white bg-redMain text-white font-bold p-2 px-8 rounded-3xl focus:outline-none focus:shadow-outline"
-              >
-                Criar
-              </button>
-            </div>
           </div>
         </div>
       </Modal>

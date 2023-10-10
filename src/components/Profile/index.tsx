@@ -2,12 +2,15 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
+import { useUserInfoContext } from '@/contexts/UserInfoContext';
 
 export default function Profile() {
-  const [name, setName] = useState('');
-  const [phone, setPhone] = useState('');
+  const { userInfo } = useUserInfoContext();
+  const [name, setName] = useState(userInfo?.name || '');
+  const [phone, setPhone] = useState(userInfo?.phone || '');
   const [password, setPassword] = useState('');
   const router = useRouter();
+  
   async function handleUpdate(event: any) {
     event.preventDefault();
     const newUser = {
@@ -16,10 +19,12 @@ export default function Profile() {
       password,
       id: localStorage.getItem('id')
     };
-    axios.defaults.headers.common['Authorization'] =
-      localStorage.getItem('token');
     axios
-      .put('http://localhost:3001/users', newUser)
+      .put('http://localhost:3001/users', newUser, {
+        headers: {
+          Authorization: localStorage.getItem('token')
+        }
+      })
       .then(() => {
         router.push('/authenticated/home');
       })
@@ -50,6 +55,7 @@ export default function Profile() {
                   id="name"
                   type="text"
                   placeholder="Nome"
+                  value={name}
                   onChange={e => setName(e.target.value)}
                 />
               </div>
@@ -68,6 +74,7 @@ export default function Profile() {
                   id="phone"
                   type="text"
                   placeholder="Telefone"
+                  value={phone}
                   onChange={e => setPhone(e.target.value)}
                 />
               </div>

@@ -2,26 +2,50 @@
 import { useEstablishmentsContext } from '@/contexts/EstablishmentsContext';
 import { Modal } from '@mui/material';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
-import { SetStateAction, useState } from 'react';
+import { useState } from 'react';
+import axios from 'axios';
 
 export default function Establishments() {
   const [open, setOpen] = useState(false);
-  const [selectedRow, setSelectedRow] = useState(null);
+  const [selectedRow, setSelectedRow] = useState<any>('');
   const establishmentsData = useEstablishmentsContext();
 
-  const handleRowDoubleClick = (params: { row: SetStateAction<null> }) => {
+  const [datetime, setDatetime] = useState(new Date());
+  const [numPeople, setNumPeople] = useState(0);
+  const [observation, setObservation] = useState('');
+
+  const handleRowDoubleClick = (params: any) => {
     setSelectedRow(params.row);
     setOpen(true);
   };
 
   const handleConfirmReserve = () => {
+    const data = {
+      userId: localStorage.getItem('id'),
+      establishmentId: selectedRow.id,
+      datetime: datetime,
+      numPeople: numPeople,
+      observation: observation
+    };
+    axios
+      .post('http://localhost:3001/reservations', data, {
+        headers: {
+          Authorization: localStorage.getItem('token')
+        }
+      })
+      .then(() => {
+        console.log('ok');
+      })
+      .catch(error => {
+        console.log('error ', error);
+      });
     setOpen(false);
-    setSelectedRow(null);
+    setSelectedRow('');
   };
 
   const handleCancelReserve = () => {
     setOpen(false);
-    setSelectedRow(null);
+    setSelectedRow('');
   };
 
   const columns: GridColDef[] = [
@@ -68,6 +92,7 @@ export default function Establishments() {
                   id="quantity"
                   type="number"
                   placeholder="Quantidade"
+                  onChange={e => setNumPeople(parseInt(e.target.value, 10))}
                 />
               </div>
               <div className="">
@@ -76,6 +101,7 @@ export default function Establishments() {
                   id="notes"
                   type="text"
                   placeholder="Observações"
+                  onChange={e => setObservation(e.target.value)}
                 />
               </div>
               <div className="mb-4">
@@ -84,6 +110,7 @@ export default function Establishments() {
                   id="calendar"
                   type="datetime-local"
                   placeholder="Data"
+                  onChange={e => setDatetime(new Date(e.target.value))}
                 />
               </div>
             </form>

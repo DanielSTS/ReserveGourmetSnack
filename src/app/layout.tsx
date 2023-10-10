@@ -3,7 +3,7 @@ import { ReactNode } from 'react';
 import type { Metadata } from 'next';
 import { Raleway } from 'next/font/google';
 import { EstablishmentsContextProvider } from '@/contexts/EstablishmentsContext';
-import { ReservationsContextProvider } from '@/contexts/ReservationsContext';
+import { UserInfoContextProvider  } from '@/contexts/UserInfoContext';
 
 const raleway = Raleway({ subsets: ['latin'] });
 export const metadata: Metadata = {
@@ -19,11 +19,11 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           'bg-background text-white md:mx-auto xl:max-w-screen-2xl flex flex-col min-h-screen'
         }
       >
-        <ReservationsContextProvider>
+        <UserInfoContextProvider>
           <EstablishmentsContextProvider>
             {children}
           </EstablishmentsContextProvider>
-        </ReservationsContextProvider>
+        </UserInfoContextProvider>
       </body>
     </html>
   );

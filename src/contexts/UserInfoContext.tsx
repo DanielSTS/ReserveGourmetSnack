@@ -7,12 +7,13 @@ import {
   useState
 } from 'react';
 
-const ReservationsContext = createContext<ReservationData[]>([]);
+const UserInfoContext = createContext<UserInfoData>({} as UserInfoData);
 
-export const useReservationsContext = () => {
-  return useContext(ReservationsContext);
+export const useUserInfoContext = () => {
+  return useContext(UserInfoContext);
 };
-export type ReservationData = {
+
+type ReservationDto = {
   id: string;
   userId: string;
   establishmentId: string;
@@ -23,24 +24,33 @@ export type ReservationData = {
   observation: string;
 };
 
+type UserDto = {
+  id: string;
+  name: string;
+  phone: string;
+};
+
+export type UserInfoData = {
+  userInfo: UserDto;
+  reservations: ReservationDto[];
+}
+
 type ReservationsProviderProps = {
   children: ReactNode;
 };
 
-export function ReservationsContextProvider({
+export function UserInfoContextProvider({
   children
 }: ReservationsProviderProps) {
-  const [ReservationsData, setReservationsData] = useState<ReservationData[]>(
-    []
-  );
+  const [ReservationsData, setReservationsData] = useState<UserInfoData>({} as UserInfoData);
 
   async function fetchData() {
     const userId = localStorage.getItem('id');
     if (userId) {
-      await fetch(`http://localhost:3001/reservations-by-user-id/${userId}`)
+      await fetch(`http://localhost:3001/users/${userId}`)
         .then(response => response.json())
         .then(data => {
-          console.log(data as ReservationData[]);
+          console.log(data as UserInfoData);
           setReservationsData(data);
         })
         .catch(error => {
@@ -54,7 +64,7 @@ export function ReservationsContextProvider({
 
     const interval = setInterval(() => {
       void fetchData();
-    }, 30 * 1000);
+    }, 300 * 1000);
 
     return () => {
       clearInterval(interval);
@@ -62,8 +72,8 @@ export function ReservationsContextProvider({
   }, []);
 
   return (
-    <ReservationsContext.Provider value={ReservationsData}>
+    <UserInfoContext.Provider value={ReservationsData}>
       {children}
-    </ReservationsContext.Provider>
+    </UserInfoContext.Provider>
   );
 }
