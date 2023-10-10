@@ -1,6 +1,32 @@
+'use client';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import axios from 'axios';
 export default function Register() {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const router = useRouter();
+
+  async function handleRegister(event: any) {
+    event.preventDefault();
+    const newUser = {
+      name,
+      email,
+      password
+    };
+    axios
+      .post('http://localhost:3001/users', newUser)
+      .then(() => {
+        router.push('/login');
+      })
+      .catch(error => {
+        console.log('error ', error);
+      });
+  }
+
   return (
     <div className="bg-white shadow-md rounded m-auto h-auto flex">
       <div className="w-1/3 flex flex-col p-8 gap-16 bg-redMain shadow-md rounded">
@@ -25,13 +51,17 @@ export default function Register() {
         <h2 className="text-2xl font-bold mb-6 text-center text-redMain">
           Criar Conta
         </h2>
-        <form className="flex flex-col gap-4 items-center">
+        <form
+          className="flex flex-col gap-4 items-center"
+          onSubmit={handleRegister}
+        >
           <div className="mb-4">
             <input
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               id="username"
               type="text"
               placeholder="Username"
+              onChange={e => setName(e.target.value)}
             />
           </div>
           <div className="mb-4">
@@ -40,6 +70,7 @@ export default function Register() {
               id="email"
               type="email"
               placeholder="Email"
+              onChange={e => setEmail(e.target.value)}
             />
           </div>
           <div className="mb-4">
@@ -48,15 +79,16 @@ export default function Register() {
               id="password"
               type="password"
               placeholder="Password"
+              onChange={e => setPassword(e.target.value)}
             />
           </div>
           <div className="flex items-center justify-between">
-            <Link
+            <button
               className="border-2 border-white bg-redMain text-white font-bold p-2 px-8 rounded-3xl focus:outline-none focus:shadow-outline"
-              href="/login"
+              type="submit"
             >
               Cadastre-se
-            </Link>
+            </button>
           </div>
         </form>
       </div>

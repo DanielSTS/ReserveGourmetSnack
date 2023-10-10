@@ -3,7 +3,7 @@ import { DataGrid, GridColDef } from '@mui/x-data-grid';
 
 export default function Favorites() {
   const columns: GridColDef[] = [
-    { field: 'id', headerName: 'ID', width: 70 },
+    { field: 'id', headerName: 'ID' },
     { field: 'nome', headerName: 'Nome', width: 150 },
     { field: 'categoria', headerName: 'Categoria', width: 150 },
     { field: 'localizacao', headerName: 'Localização', width: 150 }
@@ -32,7 +32,14 @@ export default function Favorites() {
   return (
     <div className="p-4 bg-white rounded shadow my-4 mr-4">
       <h1 className="text-redMain text-center p-2 text-lg">Favoritos</h1>
-      <DataGrid columns={columns} rows={rows} rowHeight={40} />
+      <DataGrid
+        columns={columns}
+        rows={rows}
+        rowHeight={40}
+        columnVisibilityModel={{
+          id: false
+        }}
+      />
     </div>
   );
 }

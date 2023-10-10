@@ -1,11 +1,13 @@
 'use client';
+import { useEstablishmentsContext } from '@/contexts/EstablishmentsContext';
 import { Modal } from '@mui/material';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { SetStateAction, useState } from 'react';
 
-export default function Restaurants() {
+export default function Establishments() {
   const [open, setOpen] = useState(false);
   const [selectedRow, setSelectedRow] = useState(null);
+  const establishmentsData = useEstablishmentsContext();
 
   const handleRowDoubleClick = (params: { row: SetStateAction<null> }) => {
     setSelectedRow(params.row);
@@ -23,52 +25,36 @@ export default function Restaurants() {
   };
 
   const columns: GridColDef[] = [
-    { field: 'id', headerName: 'ID', width: 70 },
-    { field: 'nome', headerName: 'Nome', width: 150 },
-    { field: 'categoria', headerName: 'Categoria', width: 150 },
-    { field: 'localizacao', headerName: 'Localização', width: 150 },
-    { field: 'aberto', headerName: 'Aberto', width: 150 },
+    { field: 'id', headerName: 'ID' },
+    { field: 'name', headerName: 'Nome', width: 200 },
+    { field: 'category', headerName: 'Categoria', width: 200 },
+    { field: 'address', headerName: 'Localização', width: 200 },
     {
-      field: 'horarioFuncionamento',
+      field: 'state',
+      headerName: 'Aberto',
+      width: 200,
+      valueGetter: params => 'open'
+    },
+    {
+      field: 'hour',
       headerName: 'Horário de Funcionamento',
-      width: 200
+      width: 300,
+      valueGetter: params =>
+        params.row.openingHoursStart + ' - ' + params.row.openingHoursEnd
     }
   ];
 
-  const rows = [
-    {
-      id: 1,
-      nome: 'Restaurante 1',
-      categoria: 'Categoria 1',
-      localizacao: 'Localização 1',
-      aberto: true,
-      horarioFuncionamento: '09:00 - 18:00'
-    },
-    {
-      id: 2,
-      nome: 'Restaurante 2',
-      categoria: 'Categoria 2',
-      localizacao: 'Localização 2',
-      aberto: false,
-      horarioFuncionamento: '10:00 - 20:00'
-    },
-    {
-      id: 3,
-      nome: 'Restaurante 3',
-      categoria: 'Categoria 1',
-      localizacao: 'Localização 3',
-      aberto: true,
-      horarioFuncionamento: '08:00 - 17:00'
-    }
-  ];
   return (
     <div className="p-4 bg-white rounded shadow mx-4">
       <h1 className="text-redMain text-center p-2 text-lg">Restaurantes</h1>
       <DataGrid
         columns={columns}
-        rows={rows}
+        rows={establishmentsData}
         rowHeight={40}
         onRowDoubleClick={handleRowDoubleClick}
+        columnVisibilityModel={{
+          id: false
+        }}
       />
 
       <Modal open={open} onClose={() => setOpen(false)}>

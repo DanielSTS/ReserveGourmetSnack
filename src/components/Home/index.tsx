@@ -1,6 +1,6 @@
 import Favorites from '../Favorites';
 import MyReserves from '../MyReserves';
-import Restaurants from '../Restaurants';
+import Establishments from '../Establishments';
 
 export default function Home() {
   return (
@@ -12,7 +12,7 @@ export default function Home() {
         <Favorites />
       </div>
       <div className="col-span-2 md:col-span-2">
-        <Restaurants />
+        <Establishments />
       </div>
     </div>
   );

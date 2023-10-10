@@ -1,6 +1,33 @@
-import Link from 'next/link';
+'use client';
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import axios from 'axios';
 
 export default function Profile() {
+  const [name, setName] = useState('');
+  const [phone, setPhone] = useState('');
+  const [password, setPassword] = useState('');
+  const router = useRouter();
+  async function handleUpdate(event: any) {
+    event.preventDefault();
+    const newUser = {
+      name,
+      phone,
+      password,
+      id: localStorage.getItem('id')
+    };
+    axios.defaults.headers.common['Authorization'] =
+      localStorage.getItem('token');
+    axios
+      .put('http://localhost:3001/users', newUser)
+      .then(() => {
+        router.push('/authenticated/home');
+      })
+      .catch(error => {
+        console.log('error ', error);
+      });
+  }
+
   return (
     <>
       <section
@@ -13,13 +40,17 @@ export default function Profile() {
             <h2 className="text-2xl font-bold mb-8 text-center text-redMain">
               Atualizar dados
             </h2>
-            <form className="flex flex-col gap-6 items-center">
+            <form
+              className="flex flex-col gap-6 items-center"
+              onSubmit={handleUpdate}
+            >
               <div className="">
                 <input
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                   id="name"
                   type="text"
                   placeholder="Nome"
+                  onChange={e => setName(e.target.value)}
                 />
               </div>
               <div className="">
@@ -28,6 +59,7 @@ export default function Profile() {
                   id="password"
                   type="password"
                   placeholder="Password"
+                  onChange={e => setPassword(e.target.value)}
                 />
               </div>
               <div className="mb-4">
@@ -36,15 +68,16 @@ export default function Profile() {
                   id="phone"
                   type="text"
                   placeholder="Telefone"
+                  onChange={e => setPhone(e.target.value)}
                 />
               </div>
               <div className="flex items-center justify-between">
-                <Link
+                <button
                   className="border-2 border-white bg-redMain text-white font-bold p-2 px-8 rounded-3xl focus:outline-none focus:shadow-outline"
-                  href="/authenticated/profile"
+                  type="submit"
                 >
                   Atualizar
-                </Link>
+                </button>
               </div>
             </form>
           </div>

@@ -5,23 +5,34 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { useState } from 'react';
+import { useReservationsContext } from '@/contexts/ReservationsContext';
 
 export default function MyReserves() {
   const [openModalDelete, setOpenModalDelete] = useState(false);
   const [openModalEdit, setOpenModalEdit] = useState(false);
-  const [selectedRow, setSelectedRow] = useState<number | null>(null);
+  const [selectedRow, setSelectedRow] = useState<string>('');
+  const reservationsData = useReservationsContext();
+
+  const [editedReservation, setEditedReservation] = useState({
+    id: '',
+    name: '',
+    datetime: new Date(),
+    numPeople: 0,
+    observation: ''
+  });
+
   const columns: GridColDef[] = [
-    { field: 'id', headerName: 'ID', width: 50 },
-    { field: 'nome', headerName: 'Nome', width: 120 },
-    { field: 'categoria', headerName: 'Categoria', width: 150 },
-    { field: 'horario', headerName: 'Horário', width: 100 },
+    { field: 'id', headerName: 'ID' },
+    { field: 'establishmentName', headerName: 'Estabelecimento', width: 160 },
+    { field: 'category', headerName: 'Categoria', width: 130 },
+    { field: 'datetime', headerName: 'Horário', width: 120 },
     {
-      field: 'quantidade',
+      field: 'numPeople',
       headerName: 'Quantidade',
-      width: 150,
+      width: 200,
       renderCell: params => (
         <div className="flex gap-2 items-center">
-          <>{params.row.quantidade}</>
+          <>{params.row.numPeople}</>
           <IconButton
             aria-label="Editar"
             onClick={() => handleEdit(params.row.id)}
@@ -39,64 +50,58 @@ export default function MyReserves() {
     }
   ];
 
-  const rows = [
-    {
-      id: 1,
-      nome: 'Reserva 1',
-      categoria: 'Categoria 1',
-      horario: '10:00',
-      quantidade: 5
-    },
-    {
-      id: 2,
-      nome: 'Reserva 2',
-      categoria: 'Categoria 2',
-      horario: '12:00',
-      quantidade: 3
-    },
-    {
-      id: 3,
-      nome: 'Reserva 3',
-      categoria: 'Categoria 1',
-      horario: '14:00',
-      quantidade: 2
-    }
-  ];
-
-  function handleEdit(id: number): void {
+  function handleEdit(id: string): void {
     setSelectedRow(id);
+    const selectedReservation = reservationsData.find(
+      reservation => reservation.id === id
+    )!;
+
+    setEditedReservation({
+      id: selectedReservation.id,
+      name: selectedReservation.establishmentName,
+      datetime: selectedReservation.datetime,
+      numPeople: selectedReservation.numPeople,
+      observation: selectedReservation.observation
+    });
     setOpenModalEdit(true);
   }
 
   function handleEditCancel(): void {
     setOpenModalEdit(false);
-    setSelectedRow(null);
+    setSelectedRow('');
   }
 
   function handleEditConfirm(): void {
     setOpenModalEdit(false);
-    setSelectedRow(null);
+    setSelectedRow('');
   }
 
-  function handleDelete(id: number): void {
+  function handleDelete(id: string): void {
     setSelectedRow(id);
     setOpenModalDelete(true);
   }
 
   function handleDeleteCancel(): void {
     setOpenModalDelete(false);
-    setSelectedRow(null);
+    setSelectedRow('');
   }
 
   function handleDeleteConfirm(): void {
     setOpenModalDelete(false);
-    setSelectedRow(null);
+    setSelectedRow('');
   }
 
   return (
     <div className="p-4 bg-white rounded shadow m-4">
       <h1 className="text-redMain text-center p-2 text-lg">Minhas Reservas</h1>
-      <DataGrid columns={columns} rows={rows} rowHeight={40} />
+      <DataGrid
+        columns={columns}
+        rows={reservationsData}
+        columnVisibilityModel={{
+          id: false
+        }}
+        rowHeight={40}
+      />
 
       <Modal open={openModalDelete} onClose={() => setOpenModalDelete(false)}>
         <div className="fixed inset-0 flex items-center justify-center">
@@ -132,6 +137,7 @@ export default function MyReserves() {
                   id="quantity"
                   type="number"
                   placeholder="Quantidade"
+                  value={editedReservation.numPeople}
                 />
               </div>
               <div className="">
@@ -140,6 +146,7 @@ export default function MyReserves() {
                   id="notes"
                   type="text"
                   placeholder="Observações"
+                  value={editedReservation.observation}
                 />
               </div>
               <div className="mb-4">
@@ -148,6 +155,7 @@ export default function MyReserves() {
                   id="calendar"
                   type="datetime-local"
                   placeholder="Data"
+                  value={editedReservation.datetime.toString()}
                 />
               </div>
             </form>

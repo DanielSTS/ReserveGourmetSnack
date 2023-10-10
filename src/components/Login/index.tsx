@@ -1,6 +1,33 @@
+'use client';
+import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import axios from 'axios';
+
 export default function Login() {
+  const router = useRouter();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  async function handleLogin(event: any) {
+    event.preventDefault();
+    const login = {
+      email,
+      password
+    };
+    axios
+      .post('http://localhost:3001/login', login)
+      .then(response => {
+        localStorage.setItem('token', response.data.token);
+        localStorage.setItem('id', response.data.id);
+        router.push('/authenticated/home');
+      })
+      .catch(error => {
+        console.log('error ', error);
+      });
+  }
+
   return (
     <div className="bg-white shadow-md rounded m-auto h-auto flex">
       <div className="w-1/3 flex flex-col p-8 gap-16 bg-redMain shadow-md rounded">
@@ -25,13 +52,17 @@ export default function Login() {
         <h2 className="text-2xl font-bold mb-8 text-center text-redMain">
           Acesse sua conta
         </h2>
-        <form className="flex flex-col gap-4 items-center">
+        <form
+          className="flex flex-col gap-4 items-center"
+          onSubmit={handleLogin}
+        >
           <div className="mb-4">
             <input
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               id="email"
               type="email"
               placeholder="Email"
+              onChange={e => setEmail(e.target.value)}
             />
           </div>
           <div className="">
@@ -40,6 +71,7 @@ export default function Login() {
               id="password"
               type="password"
               placeholder="Password"
+              onChange={e => setPassword(e.target.value)}
             />
           </div>
           <Link
@@ -49,12 +81,13 @@ export default function Login() {
             Esqueceu sua senha ?
           </Link>
           <div className="flex items-center justify-between">
-            <Link
+            <button
               className="border-2 border-white bg-redMain text-white font-bold p-2 px-8 rounded-3xl focus:outline-none focus:shadow-outline"
-              href="/authenticated/home"
+              type="submit"
+              onClick={handleLogin}
             >
               Entrar
-            </Link>
+            </button>
           </div>
         </form>
       </div>
