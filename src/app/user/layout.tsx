@@ -6,9 +6,9 @@ import Aside from '@/components/Aside';
 export default function Layout({ children }: { children: ReactNode }) {
   return (
     <>
-      <Header />
+      <Header owner={true} />
       <div className="flex flex-1">
-        <Aside />
+        <Aside owner={false}/>
         <main className="flex-1">{children}</main>
       </div>
     </>

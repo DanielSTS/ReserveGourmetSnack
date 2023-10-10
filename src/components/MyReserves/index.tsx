@@ -12,7 +12,7 @@ export default function MyReserves() {
   const [openModalDelete, setOpenModalDelete] = useState(false);
   const [openModalEdit, setOpenModalEdit] = useState(false);
   const [selectedRow, setSelectedRow] = useState<string>('');
-  const { reservations: reservationsData} = useUserInfoContext();
+  const { reservations: reservationsData } = useUserInfoContext();
 
   const [editedReservation, setEditedReservation] = useState({
     id: '',
@@ -130,7 +130,7 @@ export default function MyReserves() {
       <h1 className="text-redMain text-center p-2 text-lg">Minhas Reservas</h1>
       <DataGrid
         columns={columns}
-        rows={reservationsData}
+        rows={reservationsData.length ? reservationsData : []}
         columnVisibilityModel={{
           id: false
         }}

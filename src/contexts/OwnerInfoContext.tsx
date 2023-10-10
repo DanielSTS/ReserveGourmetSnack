@@ -7,34 +7,32 @@ import {
   useState
 } from 'react';
 
-const UserInfoContext = createContext<UserInfoData>({
+const OwnerInfoContext = createContext<OwnerInfoData>({
   reservations: [],
-  userInfo: {}
-} as unknown as UserInfoData);
+  ownerInfo: {}
+} as unknown as OwnerInfoData);
 
-export const useUserInfoContext = () => {
-  return useContext(UserInfoContext);
+export const useOwnerInfoContext = () => {
+  return useContext(OwnerInfoContext);
 };
 
-type ReservationDto = {
+export type ReservationDto = {
   id: string;
   userId: string;
-  establishmentId: string;
-  category: string;
-  establishmentName: string;
+  userName?: string;
   datetime: Date;
   numPeople: number;
   observation: string;
 };
 
-type UserDto = {
+type OwnerDto = {
   id: string;
   name: string;
   phone: string;
 };
 
-export type UserInfoData = {
-  userInfo: UserDto;
+export type OwnerInfoData = {
+  ownerInfo: OwnerDto;
   reservations: ReservationDto[];
 };
 
@@ -42,21 +40,21 @@ type ReservationsProviderProps = {
   children: ReactNode;
 };
 
-export function UserInfoContextProvider({
+export function OwnerInfoContextProvider({
   children
 }: ReservationsProviderProps) {
-  const [ReservationsData, setReservationsData] = useState<UserInfoData>({
+  const [ReservationsData, setReservationsData] = useState<OwnerInfoData>({
     reservations: [],
-    userInfo: {}
-  } as unknown as UserInfoData);
+    ownerInfo: {}
+  } as unknown as OwnerInfoData);
 
   async function fetchData() {
-    const userId = localStorage.getItem('id');
-    if (userId) {
-      await fetch(`http://localhost:3001/users/${userId}`)
+    const ownerId = localStorage.getItem('id');
+    if (ownerId) {
+      await fetch(`http://localhost:3001/owners/${ownerId}`)
         .then(response => response.json())
         .then(data => {
-          console.log(data as UserInfoData);
+          console.log(data as OwnerInfoData);
           setReservationsData(data);
         })
         .catch(error => {
@@ -78,8 +76,8 @@ export function UserInfoContextProvider({
   }, []);
 
   return (
-    <UserInfoContext.Provider value={ReservationsData}>
+    <OwnerInfoContext.Provider value={ReservationsData}>
       {children}
-    </UserInfoContext.Provider>
+    </OwnerInfoContext.Provider>
   );
 }

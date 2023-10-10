@@ -4,11 +4,27 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
+import AlertMessage from '../AlertMessage';
 
 export default function Login() {
   const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
+  const [successOpen, setSuccessOpen] = useState(false);
+  const [errorOpen, setErrorOpen] = useState(false);
+  const handleSuccessOpen = () => {
+    setSuccessOpen(true);
+  };
+  const handleSuccessClose = () => {
+    setSuccessOpen(false);
+  };
+  const handleErrorOpen = () => {
+    setErrorOpen(true);
+  };
+  const handleErrorClose = () => {
+    setErrorOpen(false);
+  };
 
   async function handleLogin(event: any) {
     event.preventDefault();
@@ -21,10 +37,12 @@ export default function Login() {
       .then(response => {
         localStorage.setItem('token', response.data.token);
         localStorage.setItem('id', response.data.id);
-        router.push('/authenticated/home');
+        handleSuccessOpen();
+        router.push('/user/home');
       })
       .catch(error => {
         console.log('error ', error);
+        handleErrorOpen();
       });
   }
 
@@ -33,7 +51,7 @@ export default function Login() {
       <div className="w-1/3 flex flex-col p-8 gap-16 bg-redMain shadow-md rounded">
         <Image
           className={'w-96 h-36 text-redMain'}
-          src={'/admin-white.svg'}
+          src={'/logo-big.svg'}
           alt="Logo"
           width={140}
           height={140}
@@ -91,6 +109,18 @@ export default function Login() {
           </div>
         </form>
       </div>
+      <AlertMessage
+        open={successOpen}
+        severity="success"
+        message="Login realizado com sucesso!"
+        onClose={handleSuccessClose}
+      />
+      <AlertMessage
+        open={errorOpen}
+        severity="error"
+        message="Erro ao fazer o login. Verifique suas credenciais."
+        onClose={handleErrorClose}
+      />
     </div>
   );
 }

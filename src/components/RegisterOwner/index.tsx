@@ -4,7 +4,8 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
-export default function Register() {
+
+export default function RegisterOwner() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -20,7 +21,7 @@ export default function Register() {
     axios
       .post('http://localhost:3001/users', newUser)
       .then(() => {
-        router.push('/login');
+        router.push('/owner-login');
       })
       .catch(error => {
         console.log('error ', error);
@@ -32,24 +33,25 @@ export default function Register() {
       <div className="w-1/3 flex flex-col p-8 gap-16 bg-redMain shadow-md rounded">
         <Image
           className={'w-96 h-36 text-redMain'}
-          src={'/logo-big.svg'}
+          src={'/admin-white.svg'}
           alt="Logo"
           width={140}
           height={140}
         />
         <p className="">
-          <strong>Já tem uma conta ? </strong> Acesse sua conta agora mesmo!
+          <strong>Já tem uma conta admin ? </strong> Acesse sua conta agora
+          mesmo!
         </p>
         <Link
           className="border-2 border-white bg-redMain text-white font-bold p-2 rounded-3xl focus:outline-none focus:shadow-outline text-center"
-          href="/login"
+          href="/owner-login"
         >
           Entrar
         </Link>
       </div>
       <div className="w-2/3 p-4  flex flex-col gap-4">
         <h2 className="text-2xl font-bold mb-6 text-center text-redMain">
-          Criar Conta
+          Criar Conta Admin
         </h2>
         <form
           className="flex flex-col gap-4 items-center"

@@ -6,7 +6,7 @@ export default function RecoverPassword() {
       <div className="w-1/3 flex flex-col p-8 gap-16 bg-redMain shadow-md rounded">
         <Image
           className={'w-96 h-36 text-redMain'}
-          src={'/admin-white.svg'}
+          src={'/logo-big.svg'}
           alt="Logo"
           width={140}
           height={140}

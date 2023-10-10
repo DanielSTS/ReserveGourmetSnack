@@ -3,7 +3,7 @@ import { ReactNode } from 'react';
 import type { Metadata } from 'next';
 import { Raleway } from 'next/font/google';
 import { EstablishmentsContextProvider } from '@/contexts/EstablishmentsContext';
-import { UserInfoContextProvider  } from '@/contexts/UserInfoContext';
+import { UserInfoContextProvider } from '@/contexts/UserInfoContext';
 
 const raleway = Raleway({ subsets: ['latin'] });
 export const metadata: Metadata = {
@@ -16,7 +16,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
     <html lang="en">
       <body
         className={
-          'bg-background text-white md:mx-auto xl:max-w-screen-2xl flex flex-col min-h-screen'
+          'bg-background text-white md:mx-auto  flex flex-col min-h-screen'
         }
       >
         <UserInfoContextProvider>

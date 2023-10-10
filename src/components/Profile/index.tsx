@@ -10,7 +10,7 @@ export default function Profile() {
   const [phone, setPhone] = useState(userInfo?.phone || '');
   const [password, setPassword] = useState('');
   const router = useRouter();
-  
+
   async function handleUpdate(event: any) {
     event.preventDefault();
     const newUser = {
@@ -26,7 +26,7 @@ export default function Profile() {
         }
       })
       .then(() => {
-        router.push('/authenticated/home');
+        router.push('/user/home');
       })
       .catch(error => {
         console.log('error ', error);
