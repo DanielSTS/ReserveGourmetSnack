@@ -6,6 +6,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { useState } from 'react';
 import { useReservationsContext } from '@/contexts/ReservationsContext';
+import axios from 'axios';
 
 export default function MyReserves() {
   const [openModalDelete, setOpenModalDelete] = useState(false);
@@ -55,11 +56,10 @@ export default function MyReserves() {
     const selectedReservation = reservationsData.find(
       reservation => reservation.id === id
     )!;
-
     setEditedReservation({
       id: selectedReservation.id,
       name: selectedReservation.establishmentName,
-      datetime: selectedReservation.datetime,
+      datetime: new Date(selectedReservation.datetime),
       numPeople: selectedReservation.numPeople,
       observation: selectedReservation.observation
     });
@@ -72,6 +72,24 @@ export default function MyReserves() {
   }
 
   function handleEditConfirm(): void {
+    axios
+    .put('http://localhost:3001/reservations', {
+      headers: {
+        Authorization: localStorage.getItem('token')
+      },
+      data: {
+        id: selectedRow,
+        datetime: editedReservation.datetime,
+        numPeople: editedReservation.numPeople,
+        observation: editedReservation.observation
+      }
+    })
+    .then(() => {
+     console.log('ok')
+    })
+    .catch(error => {
+      console.log('error ', error);
+    });
     setOpenModalEdit(false);
     setSelectedRow('');
   }
@@ -87,6 +105,21 @@ export default function MyReserves() {
   }
 
   function handleDeleteConfirm(): void {
+    axios
+      .delete('http://localhost:3001/reservations', {
+        headers: {
+          Authorization: localStorage.getItem('token')
+        },
+        data: {
+          id: selectedRow
+        }
+      })
+      .then(() => {
+       console.log('ok')
+      })
+      .catch(error => {
+        console.log('error ', error);
+      });
     setOpenModalDelete(false);
     setSelectedRow('');
   }
@@ -138,6 +171,10 @@ export default function MyReserves() {
                   type="number"
                   placeholder="Quantidade"
                   value={editedReservation.numPeople}
+                  onChange={e => setEditedReservation(prevState => ({
+                    ...prevState,
+                    numPeople: parseInt(e.target.value, 10)
+                  }))}
                 />
               </div>
               <div className="">
@@ -147,6 +184,10 @@ export default function MyReserves() {
                   type="text"
                   placeholder="Observações"
                   value={editedReservation.observation}
+                  onChange={e => setEditedReservation(prevState => ({
+                    ...prevState,
+                    observation: e.target.value
+                  }))}
                 />
               </div>
               <div className="mb-4">
@@ -155,7 +196,11 @@ export default function MyReserves() {
                   id="calendar"
                   type="datetime-local"
                   placeholder="Data"
-                  value={editedReservation.datetime.toString()}
+                  value={editedReservation.datetime instanceof Date ? editedReservation.datetime.toISOString().slice(0, 16) : ''}
+                  onChange={e => setEditedReservation(prevState => ({
+                    ...prevState,
+                    datetime: new Date(e.target.value)
+                  }))}
                 />
               </div>
             </form>
