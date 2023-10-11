@@ -1,5 +1,5 @@
-import Profile from '@/components/Profile';
+import ProfileOwner from '@/components/ProfileOwner';
 
-export default function PageProfile() {
-  return <Profile />;
+export default function PageProfileOwner() {
+  return <ProfileOwner />;
 }

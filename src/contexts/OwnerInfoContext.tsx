@@ -9,7 +9,8 @@ import {
 
 const OwnerInfoContext = createContext<OwnerInfoData>({
   reservations: [],
-  ownerInfo: {}
+  owner: {},
+  establishment: {}
 } as unknown as OwnerInfoData);
 
 export const useOwnerInfoContext = () => {
@@ -28,11 +29,23 @@ export type ReservationDto = {
 type OwnerDto = {
   id: string;
   name: string;
+};
+
+type EstablishmentDto = {
+  id: string;
+  name: string;
+  ownerName?: string;
   phone: string;
+  openingHoursStart: Date;
+  openingHoursEnd: Date;
+  address: string;
+  category: string;
+  maxCapacity: number;
 };
 
 export type OwnerInfoData = {
-  ownerInfo: OwnerDto;
+  owner: OwnerDto;
+  establishment?: EstablishmentDto;
   reservations: ReservationDto[];
 };
 
@@ -43,19 +56,20 @@ type ReservationsProviderProps = {
 export function OwnerInfoContextProvider({
   children
 }: ReservationsProviderProps) {
-  const [ReservationsData, setReservationsData] = useState<OwnerInfoData>({
+  const [ownerInfoData, setOwnerInfoData] = useState<OwnerInfoData>({
     reservations: [],
-    ownerInfo: {}
+    owner: {},
+    establishment: {}
   } as unknown as OwnerInfoData);
 
   async function fetchData() {
-    const ownerId = localStorage.getItem('id');
+    const ownerId = localStorage.getItem('ownerId');
     if (ownerId) {
       await fetch(`http://localhost:3001/owners/${ownerId}`)
         .then(response => response.json())
         .then(data => {
           console.log(data as OwnerInfoData);
-          setReservationsData(data);
+          setOwnerInfoData(data);
         })
         .catch(error => {
           console.error('Error fetching data:', error);
@@ -76,7 +90,7 @@ export function OwnerInfoContextProvider({
   }, []);
 
   return (
-    <OwnerInfoContext.Provider value={ReservationsData}>
+    <OwnerInfoContext.Provider value={ownerInfoData}>
       {children}
     </OwnerInfoContext.Provider>
   );

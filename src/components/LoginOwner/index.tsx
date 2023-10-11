@@ -26,7 +26,6 @@ export default function LoginOwner() {
     setErrorOpen(false);
   };
 
-
   async function handleLogin(event: any) {
     event.preventDefault();
     const login = {
@@ -37,11 +36,13 @@ export default function LoginOwner() {
       .post('http://localhost:3001/login-owner', login)
       .then(response => {
         localStorage.setItem('token', response.data.token);
-        localStorage.setItem('id', response.data.id);
+        localStorage.setItem('ownerId', response.data.id);
+        handleSuccessOpen();
         router.push('/owner/home');
       })
       .catch(error => {
         console.log('error ', error);
+        handleErrorOpen();
       });
   }
 
@@ -101,7 +102,6 @@ export default function LoginOwner() {
             <button
               className="border-2 border-white bg-redMain text-white font-bold p-2 px-8 rounded-3xl focus:outline-none focus:shadow-outline"
               type="submit"
-              onClick={handleLogin}
             >
               Entrar
             </button>

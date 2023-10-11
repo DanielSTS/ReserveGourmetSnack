@@ -7,8 +7,7 @@ type HeaderType = {
   owner: boolean;
 };
 
-
-export default function Header({owner} : HeaderType) {
+export default function Header({ owner }: HeaderType) {
   const href = owner ? '/owner-login' : '/login';
   return (
     <header className="flex items-center justify-between px-4 py-2 bg-redMain">

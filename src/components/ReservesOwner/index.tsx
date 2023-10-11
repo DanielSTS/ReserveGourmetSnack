@@ -1,11 +1,10 @@
 'use client';
 
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
-import { useUserInfoContext } from '@/contexts/UserInfoContext';
+import { useOwnerInfoContext } from '@/contexts/OwnerInfoContext';
 
 export default function ReservesOwner() {
-  const { reservations: reservationsData } = useUserInfoContext();
-
+  const { reservations } = useOwnerInfoContext();
 
   const columns: GridColDef[] = [
     { field: 'id', headerName: 'ID' },
@@ -16,7 +15,7 @@ export default function ReservesOwner() {
       headerName: 'Quantidade',
       width: 200
     },
-    { field: 'observations', headerName: 'Observações', width: 130 },
+    { field: 'observation', headerName: 'Observações', width: 130 }
   ];
 
   return (
@@ -24,7 +23,7 @@ export default function ReservesOwner() {
       <h1 className="text-redMain text-center p-2 text-lg">Reservas</h1>
       <DataGrid
         columns={columns}
-        rows={reservationsData.length ? reservationsData : []}
+        rows={reservations?.length ? reservations : []}
         columnVisibilityModel={{
           id: false
         }}

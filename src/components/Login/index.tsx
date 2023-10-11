@@ -102,7 +102,6 @@ export default function Login() {
             <button
               className="border-2 border-white bg-redMain text-white font-bold p-2 px-8 rounded-3xl focus:outline-none focus:shadow-outline"
               type="submit"
-              onClick={handleLogin}
             >
               Entrar
             </button>

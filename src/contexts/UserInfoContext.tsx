@@ -45,7 +45,7 @@ type ReservationsProviderProps = {
 export function UserInfoContextProvider({
   children
 }: ReservationsProviderProps) {
-  const [ReservationsData, setReservationsData] = useState<UserInfoData>({
+  const [userInfoData, setUserInfoData] = useState<UserInfoData>({
     reservations: [],
     userInfo: {}
   } as unknown as UserInfoData);
@@ -57,7 +57,7 @@ export function UserInfoContextProvider({
         .then(response => response.json())
         .then(data => {
           console.log(data as UserInfoData);
-          setReservationsData(data);
+          setUserInfoData(data);
         })
         .catch(error => {
           console.error('Error fetching data:', error);
@@ -78,7 +78,7 @@ export function UserInfoContextProvider({
   }, []);
 
   return (
-    <UserInfoContext.Provider value={ReservationsData}>
+    <UserInfoContext.Provider value={userInfoData}>
       {children}
     </UserInfoContext.Provider>
   );

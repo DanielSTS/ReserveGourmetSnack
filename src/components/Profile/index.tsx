@@ -6,8 +6,8 @@ import { useUserInfoContext } from '@/contexts/UserInfoContext';
 
 export default function Profile() {
   const { userInfo } = useUserInfoContext();
-  const [name, setName] = useState(userInfo?.name || '');
-  const [phone, setPhone] = useState(userInfo?.phone || '');
+  const [name, setName] = useState(userInfo?.name ?? '');
+  const [phone, setPhone] = useState(userInfo?.phone ?? '');
   const [password, setPassword] = useState('');
   const router = useRouter();
 

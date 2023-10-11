@@ -6,7 +6,7 @@ type FooterType = {
   owner: boolean;
 };
 
-export default function Aside({owner} : FooterType) {
+export default function Aside({ owner }: FooterType) {
   const prefix = owner ? 'owner' : 'user';
   return (
     <aside className="flex flex-col justify-between h-screen bg-main w-52">
@@ -20,7 +20,7 @@ export default function Aside({owner} : FooterType) {
           </li>
         </ul>
       </nav>
-     { owner && <Footer />}
+      {owner && <Footer />}
     </aside>
   );
 }
