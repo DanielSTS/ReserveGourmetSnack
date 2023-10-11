@@ -13,13 +13,13 @@ export default function ProfileOwner() {
   const [category, setCategory] = useState(establishment?.category || '');
   const [maxCapacity, setMaxCapacity] = useState(establishment?.maxCapacity || 0);
   const [address, setAddress] = useState(establishment?.address || '');
-  const [openingOpeningHoursStart, setOpeningHoursStart] = useState(establishment?.openingHoursStart ? new Date(establishment.openingHoursStart) : new Date());
-  const [openingOpeningHoursEnd, setOpeningHoursEnd] = useState(establishment?.openingHoursEnd ? new Date(establishment.openingHoursEnd) : new Date());
+  const [openingHoursStart, setOpeningHoursStart] = useState(establishment?.openingHoursStart ? new Date(establishment.openingHoursStart) : new Date());
+  const [openingHoursEnd, setOpeningHoursEnd] = useState(establishment?.openingHoursEnd ? new Date(establishment.openingHoursEnd) : new Date());
   const router = useRouter();
 
   async function handleUpdate(event: any) {
     event.preventDefault();
-    const newUser = {
+    const data = {
       ownerName,
       establishmentName,
       password,
@@ -27,12 +27,12 @@ export default function ProfileOwner() {
       category,
       maxCapacity,
       address: address,
-      openingOpeningHoursStart: openingOpeningHoursStart,
-      openingOpeningHoursEnd: openingOpeningHoursEnd,
+       openingHoursStart,
+       openingHoursEnd,
       ownerId: localStorage.getItem('ownerId')
     };
     axios
-      .put('http://localhost:3001/establishments', newUser, {
+      .put('http://localhost:3001/establishments', data, {
         headers: {
           Authorization: localStorage.getItem('token')
         }
@@ -138,7 +138,7 @@ export default function ProfileOwner() {
                   id="opening_hours_start"
                   type="time"
                   placeholder="Horário Inicial"
-                  value={openingOpeningHoursStart.toISOString().substring(11, 16)}
+                  value={openingHoursStart.toISOString().substring(11, 16)}
                   onChange={e => {
                     const [hours, minutes] = e.target.value.split(':');
                     const date = new Date();
@@ -154,7 +154,7 @@ export default function ProfileOwner() {
                   id="opening_hours_end"
                   type="time"
                   placeholder="Horário Final"
-                  value={openingOpeningHoursEnd.toISOString().substring(11, 16)}
+                  value={openingHoursEnd.toISOString().substring(11, 16)}
                   onChange={e => {
                     const [hours, minutes] = e.target.value.split(':');
                     const date = new Date();
