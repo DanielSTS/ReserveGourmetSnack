@@ -8,13 +8,25 @@ export default function ProfileOwner() {
   const { owner, establishment } = useOwnerInfoContext();
   const [ownerName, setOwnerName] = useState(owner.name ?? '');
   const [password, setPassword] = useState('');
-  const [establishmentName, setEstablishmentName] = useState(establishment?.name ?? '');
+  const [establishmentName, setEstablishmentName] = useState(
+    establishment?.name ?? ''
+  );
   const [phone, setPhone] = useState(establishment?.phone ?? '');
   const [category, setCategory] = useState(establishment?.category || '');
-  const [maxCapacity, setMaxCapacity] = useState(establishment?.maxCapacity || 0);
+  const [maxCapacity, setMaxCapacity] = useState(
+    establishment?.maxCapacity || 0
+  );
   const [address, setAddress] = useState(establishment?.address || '');
-  const [openingHoursStart, setOpeningHoursStart] = useState(establishment?.openingHoursStart ? new Date(establishment.openingHoursStart) : new Date());
-  const [openingHoursEnd, setOpeningHoursEnd] = useState(establishment?.openingHoursEnd ? new Date(establishment.openingHoursEnd) : new Date());
+  const [openingHoursStart, setOpeningHoursStart] = useState(
+    establishment?.openingHoursStart
+      ? new Date(establishment.openingHoursStart)
+      : new Date()
+  );
+  const [openingHoursEnd, setOpeningHoursEnd] = useState(
+    establishment?.openingHoursEnd
+      ? new Date(establishment.openingHoursEnd)
+      : new Date()
+  );
   const router = useRouter();
 
   async function handleUpdate(event: any) {
@@ -27,8 +39,8 @@ export default function ProfileOwner() {
       category,
       maxCapacity,
       address: address,
-       openingHoursStart,
-       openingHoursEnd,
+      openingHoursStart,
+      openingHoursEnd,
       ownerId: localStorage.getItem('ownerId')
     };
     axios
@@ -119,7 +131,7 @@ export default function ProfileOwner() {
                   type="number"
                   placeholder="Capacidade Máxima"
                   value={maxCapacity}
-                  onChange={e => setMaxCapacity( parseInt(e.target.value, 10))}
+                  onChange={e => setMaxCapacity(parseInt(e.target.value, 10))}
                 />
               </div>
               <div className="">

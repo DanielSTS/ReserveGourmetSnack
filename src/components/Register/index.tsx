@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
+import FAQ from '../Faq';
 export default function Register() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -28,6 +29,7 @@ export default function Register() {
   }
 
   return (
+    <div className='flex flex-col items-center justify-center min-h-screen py-16'>
     <div className="bg-white shadow-md rounded m-auto h-auto flex">
       <div className="w-1/3 flex flex-col p-8 gap-16 bg-redMain shadow-md rounded">
         <Image
@@ -92,6 +94,9 @@ export default function Register() {
           </div>
         </form>
       </div>
+      
+    </div>
+    <FAQ />
     </div>
   );
 }
