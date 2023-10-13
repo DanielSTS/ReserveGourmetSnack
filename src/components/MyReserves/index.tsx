@@ -1,6 +1,6 @@
 'use client';
 
-import { IconButton, Modal } from '@mui/material';
+import { Button, IconButton, Modal } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
@@ -13,6 +13,9 @@ export default function MyReserves() {
   const [openModalEdit, setOpenModalEdit] = useState(false);
   const [selectedRow, setSelectedRow] = useState<string>('');
   const { reservations: reservationsData } = useUserInfoContext();
+  const [openReview, setOpenReview] = useState(false);
+
+  const [comment, setComment] = useState('');
 
   const [editedReservation, setEditedReservation] = useState({
     id: '',
@@ -48,7 +51,17 @@ export default function MyReserves() {
           </IconButton>
         </div>
       )
-    }
+    },
+    {
+      field: 'actions',
+      headerName: 'Avaliar',
+      width: 150,
+      renderCell: (params) => (
+        <Button variant="contained" color="primary" onClick={() => handleReviewClick(params.row)}>
+          Avaliar
+        </Button>
+      ),
+    },
   ];
 
   function handleEdit(id: string): void {
@@ -124,6 +137,37 @@ export default function MyReserves() {
     setOpenModalDelete(false);
     setSelectedRow('');
   }
+
+
+  const handleReviewClick = (params: any) => {
+    setSelectedRow(params.row);
+    setOpenReview(true);
+  };
+
+  const handleConfirmReview = () => {
+    const data = {
+      userId: localStorage.getItem('id'),
+      establishmentId: selectedRow,
+      comment
+    };
+    axios
+      .post('http://localhost:3001/comments', data, {
+        headers: {
+          Authorization: localStorage.getItem('token')
+        }
+      })
+      .then(() => {
+        console.log('ok');
+      })
+      .catch(error => {
+        console.log('error ', error);
+      });
+    setOpenReview(false);
+  };
+
+  const handleCancelReview = () => {
+    setOpenReview(false);
+  };
 
   return (
     <div className="p-4 bg-white rounded shadow m-4">
@@ -232,6 +276,39 @@ export default function MyReserves() {
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      </Modal>
+
+      <Modal open={openReview} onClose={() => setOpenReview(false)}>
+        <div className="fixed inset-0 flex items-center justify-center">
+          <div className="p-4 bg-white rounded shadow  text-center flex flex-col gap-24">
+            <h1 className="text-redMain text-2xl">Avaliar</h1>
+            <form className="flex flex-col gap-6 items-center">
+              <div className="">
+                <input
+                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  id="notes"
+                  type="text"
+                  placeholder="Comentário"
+                  onChange={e => setComment(e.target.value)}
+                />
+              </div>
+            </form>
+            <div className="flex justify-between gap-6">
+              <button
+                onClick={handleCancelReview}
+                className="border-2 border-zinc-400 bg-white text-zinc-400 font-bold p-2 px-8 rounded-3xl focus:outline-none focus:shadow-outline"
+              >
+                Cancelar
+              </button>
+              <button
+                onClick={handleConfirmReview}
+                className="border-2 border-white bg-redMain text-white font-bold p-2 px-8 rounded-3xl focus:outline-none focus:shadow-outline"
+              >
+                Enviar
+              </button>
+            </div>
           </div>
         </div>
       </Modal>

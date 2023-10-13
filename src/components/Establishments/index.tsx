@@ -1,28 +1,32 @@
 'use client';
 import { useEstablishmentsContext } from '@/contexts/EstablishmentsContext';
-import { Modal } from '@mui/material';
+import { Button, Modal } from '@mui/material';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { useState } from 'react';
 import axios from 'axios';
 
 export default function Establishments() {
-  const [open, setOpen] = useState(false);
-  const [selectedRow, setSelectedRow] = useState<any>('');
+  const [openNewReservation, setOpenNewReservation] = useState(false);
+  const [openReview, setOpenReview] = useState(false);
+  const [selectedRow, setSelectedRow] = useState('');
   const establishmentsData = useEstablishmentsContext();
 
   const [datetime, setDatetime] = useState(new Date());
   const [numPeople, setNumPeople] = useState(0);
   const [observation, setObservation] = useState('');
 
-  const handleRowDoubleClick = (params: any) => {
+  const [rate, setRate] = useState(5);
+  const [comment, setComment] = useState('');
+
+  const handleReserveClick = (params: any) => {
     setSelectedRow(params.row);
-    setOpen(true);
+    setOpenNewReservation(true);
   };
 
   const handleConfirmReserve = () => {
     const data = {
       userId: localStorage.getItem('id'),
-      establishmentId: selectedRow.id,
+      establishmentId: selectedRow,
       datetime: datetime,
       numPeople: numPeople,
       observation: observation
@@ -39,13 +43,45 @@ export default function Establishments() {
       .catch(error => {
         console.log('error ', error);
       });
-    setOpen(false);
+    setOpenNewReservation(false);
     setSelectedRow('');
   };
 
   const handleCancelReserve = () => {
-    setOpen(false);
+    setOpenNewReservation(false);
     setSelectedRow('');
+  };
+
+
+  const handleReviewClick = (params: any) => {
+    setSelectedRow(params.row);
+    setOpenReview(true);
+  };
+
+  const handleConfirmReview = () => {
+    const data = {
+      userId: localStorage.getItem('id'),
+      establishmentId: selectedRow,
+      rate,
+      comment
+    };
+    axios
+      .post('http://localhost:3001/reviews', data, {
+        headers: {
+          Authorization: localStorage.getItem('token')
+        }
+      })
+      .then(() => {
+        console.log('ok');
+      })
+      .catch(error => {
+        console.log('error ', error);
+      });
+    setOpenReview(false);
+  };
+
+  const handleCancelReview = () => {
+    setOpenReview(false);
   };
 
   const columns: GridColDef[] = [
@@ -65,7 +101,26 @@ export default function Establishments() {
       width: 300,
       valueGetter: params =>
         params.row.openingHoursStart + ' - ' + params.row.openingHoursEnd
-    }
+    }, {
+      field: 'reserve',
+      headerName: 'Reservar',
+      width: 150,
+      renderCell: (params) => (
+        <Button variant="contained" color="primary" onClick={() => handleReserveClick(params)}>
+          Reservar
+        </Button>
+      ),
+    },
+    {
+      field: 'actions',
+      headerName: 'Avaliar',
+      width: 150,
+      renderCell: (params) => (
+        <Button variant="contained" color="primary" onClick={() => handleReviewClick(params)}>
+          Avaliar
+        </Button>
+      ),
+    },
   ];
 
   return (
@@ -75,13 +130,12 @@ export default function Establishments() {
         columns={columns}
         rows={establishmentsData}
         rowHeight={40}
-        onRowDoubleClick={handleRowDoubleClick}
         columnVisibilityModel={{
           id: false
         }}
       />
 
-      <Modal open={open} onClose={() => setOpen(false)}>
+      <Modal open={openNewReservation} onClose={() => setOpenNewReservation(false)}>
         <div className="fixed inset-0 flex items-center justify-center">
           <div className="p-4 bg-white rounded shadow  text-center flex flex-col gap-24">
             <h1 className="text-redMain text-2xl">Criar Reserva</h1>
@@ -126,6 +180,55 @@ export default function Establishments() {
                 className="border-2 border-white bg-redMain text-white font-bold p-2 px-8 rounded-3xl focus:outline-none focus:shadow-outline"
               >
                 Criar
+              </button>
+            </div>
+          </div>
+        </div>
+      </Modal>
+
+      <Modal open={openReview} onClose={() => setOpenReview(false)}>
+        <div className="fixed inset-0 flex items-center justify-center">
+          <div className="p-4 bg-white rounded shadow  text-center flex flex-col gap-24">
+            <h1 className="text-redMain text-2xl">Avaliar</h1>
+            <form className="flex flex-col gap-6 items-center">
+              <div className="">
+              <div className="">
+                <select
+                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  id="rate"
+                  value={rate}
+                  onChange={e => setRate(Number(e.target.value))}
+                >
+                  <option value={1}>1</option>
+                  <option value={2}>2</option>
+                  <option value={3}>3</option>
+                  <option value={4}>4</option>
+                  <option value={5}>5</option>
+                </select>
+              </div>
+              </div>
+              <div className="">
+                <input
+                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  id="notes"
+                  type="text"
+                  placeholder="Comentário"
+                  onChange={e => setComment(e.target.value)}
+                />
+              </div>
+            </form>
+            <div className="flex justify-between gap-6">
+              <button
+                onClick={handleCancelReview}
+                className="border-2 border-zinc-400 bg-white text-zinc-400 font-bold p-2 px-8 rounded-3xl focus:outline-none focus:shadow-outline"
+              >
+                Cancelar
+              </button>
+              <button
+                onClick={handleConfirmReview}
+                className="border-2 border-white bg-redMain text-white font-bold p-2 px-8 rounded-3xl focus:outline-none focus:shadow-outline"
+              >
+                Enviar
               </button>
             </div>
           </div>

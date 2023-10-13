@@ -10,7 +10,7 @@ export default function Layout({ children }: { children: ReactNode }) {
     <>
       <UserInfoContextProvider>
         <EstablishmentsContextProvider>
-          <Header owner={true} />
+          <Header owner={false} />
           <div className="flex flex-1">
             <Aside owner={false} />
             <main className="flex-1">{children}</main>
