@@ -7,6 +7,7 @@ import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { useState } from 'react';
 import { useUserInfoContext } from '@/contexts/UserInfoContext';
 import axios from 'axios';
+import AlertMessage from '../AlertMessage';
 
 export default function MyReserves() {
   const [openModalDelete, setOpenModalDelete] = useState(false);
@@ -24,6 +25,25 @@ export default function MyReserves() {
     numPeople: 0,
     observation: ''
   });
+
+  const [successOpen, setSuccessOpen] = useState(false);
+  const [errorOpen, setErrorOpen] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+  const [sucessMessage, setSucessMessage] = useState('');
+  const handleSuccessOpen = (message: string) => {
+    setSucessMessage(message);
+    setSuccessOpen(true);
+  };
+  const handleSuccessClose = () => {
+    setSuccessOpen(false);
+  };
+  const handleErrorOpen = (message: string) => {
+    setErrorMessage(message);
+    setErrorOpen(true);
+  };
+  const handleErrorClose = () => {
+    setErrorOpen(false);
+  };
 
   const columns: GridColDef[] = [
     { field: 'id', headerName: 'ID' },
@@ -56,12 +76,16 @@ export default function MyReserves() {
       field: 'actions',
       headerName: 'Avaliar',
       width: 150,
-      renderCell: (params) => (
-        <Button variant="contained" color="primary" onClick={() => handleReviewClick(params.row)}>
+      renderCell: params => (
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => handleReviewClick(params.row)}
+        >
           Avaliar
         </Button>
-      ),
-    },
+      )
+    }
   ];
 
   function handleEdit(id: string): void {
@@ -99,10 +123,11 @@ export default function MyReserves() {
         }
       })
       .then(() => {
-        console.log('ok');
+        handleSuccessOpen('Edição confirmada!');
       })
       .catch(error => {
         console.log('error ', error);
+        handleErrorOpen('Error ao enviar edição!');
       });
     setOpenModalEdit(false);
     setSelectedRow('');
@@ -129,15 +154,16 @@ export default function MyReserves() {
         }
       })
       .then(() => {
-        console.log('ok');
+        handleSuccessOpen('Reserva cancelada!');
       })
       .catch(error => {
         console.log('error ', error);
+        handleErrorOpen('Error ao cancelar reserva!');
       });
+
     setOpenModalDelete(false);
     setSelectedRow('');
   }
-
 
   const handleReviewClick = (params: any) => {
     setSelectedRow(params.row);
@@ -157,10 +183,11 @@ export default function MyReserves() {
         }
       })
       .then(() => {
-        console.log('ok');
+        handleSuccessOpen('Avaliação enviada!');
       })
       .catch(error => {
         console.log('error ', error);
+        handleErrorOpen('Error ao enviar avaliação!');
       });
     setOpenReview(false);
   };
@@ -312,6 +339,18 @@ export default function MyReserves() {
           </div>
         </div>
       </Modal>
+      <AlertMessage
+        open={successOpen}
+        severity="success"
+        message={sucessMessage}
+        onClose={handleSuccessClose}
+      />
+      <AlertMessage
+        open={errorOpen}
+        severity="error"
+        message={errorMessage}
+        onClose={handleErrorClose}
+      />
     </div>
   );
 }

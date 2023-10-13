@@ -4,6 +4,7 @@ import { Button, Modal } from '@mui/material';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { useState } from 'react';
 import axios from 'axios';
+import AlertMessage from '../AlertMessage';
 
 export default function Establishments() {
   const [openNewReservation, setOpenNewReservation] = useState(false);
@@ -17,6 +18,25 @@ export default function Establishments() {
 
   const [rate, setRate] = useState(5);
   const [comment, setComment] = useState('');
+
+  const [successOpen, setSuccessOpen] = useState(false);
+  const [errorOpen, setErrorOpen] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+  const [sucessMessage, setSucessMessage] = useState('');
+  const handleSuccessOpen = (message: string) => {
+    setSucessMessage(message);
+    setSuccessOpen(true);
+  };
+  const handleSuccessClose = () => {
+    setSuccessOpen(false);
+  };
+  const handleErrorOpen = (message: string) => {
+    setErrorMessage(message);
+    setErrorOpen(true);
+  };
+  const handleErrorClose = () => {
+    setErrorOpen(false);
+  };
 
   const handleReserveClick = (params: any) => {
     setSelectedRow(params.row);
@@ -38,10 +58,11 @@ export default function Establishments() {
         }
       })
       .then(() => {
-        console.log('ok');
+        handleSuccessOpen('Reserva confirmada!')
       })
       .catch(error => {
         console.log('error ', error);
+        handleErrorOpen('Erro ao efetuar reserva!')
       });
     setOpenNewReservation(false);
     setSelectedRow('');
@@ -51,7 +72,6 @@ export default function Establishments() {
     setOpenNewReservation(false);
     setSelectedRow('');
   };
-
 
   const handleReviewClick = (params: any) => {
     setSelectedRow(params.row);
@@ -72,10 +92,11 @@ export default function Establishments() {
         }
       })
       .then(() => {
-        console.log('ok');
+        handleSuccessOpen('Avaliação enviada!')
       })
       .catch(error => {
         console.log('error ', error);
+        handleErrorOpen('Erro ao enviar avaliação!')
       });
     setOpenReview(false);
   };
@@ -101,26 +122,35 @@ export default function Establishments() {
       width: 300,
       valueGetter: params =>
         params.row.openingHoursStart + ' - ' + params.row.openingHoursEnd
-    }, {
+    },
+    {
       field: 'reserve',
       headerName: 'Reservar',
       width: 150,
-      renderCell: (params) => (
-        <Button variant="contained" color="primary" onClick={() => handleReserveClick(params)}>
+      renderCell: params => (
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => handleReserveClick(params)}
+        >
           Reservar
         </Button>
-      ),
+      )
     },
     {
       field: 'actions',
       headerName: 'Avaliar',
       width: 150,
-      renderCell: (params) => (
-        <Button variant="contained" color="primary" onClick={() => handleReviewClick(params)}>
+      renderCell: params => (
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => handleReviewClick(params)}
+        >
           Avaliar
         </Button>
-      ),
-    },
+      )
+    }
   ];
 
   return (
@@ -135,7 +165,10 @@ export default function Establishments() {
         }}
       />
 
-      <Modal open={openNewReservation} onClose={() => setOpenNewReservation(false)}>
+      <Modal
+        open={openNewReservation}
+        onClose={() => setOpenNewReservation(false)}
+      >
         <div className="fixed inset-0 flex items-center justify-center">
           <div className="p-4 bg-white rounded shadow  text-center flex flex-col gap-24">
             <h1 className="text-redMain text-2xl">Criar Reserva</h1>
@@ -192,20 +225,20 @@ export default function Establishments() {
             <h1 className="text-redMain text-2xl">Avaliar</h1>
             <form className="flex flex-col gap-6 items-center">
               <div className="">
-              <div className="">
-                <select
-                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  id="rate"
-                  value={rate}
-                  onChange={e => setRate(Number(e.target.value))}
-                >
-                  <option value={1}>1</option>
-                  <option value={2}>2</option>
-                  <option value={3}>3</option>
-                  <option value={4}>4</option>
-                  <option value={5}>5</option>
-                </select>
-              </div>
+                <div className="">
+                  <select
+                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    id="rate"
+                    value={rate}
+                    onChange={e => setRate(Number(e.target.value))}
+                  >
+                    <option value={1}>1</option>
+                    <option value={2}>2</option>
+                    <option value={3}>3</option>
+                    <option value={4}>4</option>
+                    <option value={5}>5</option>
+                  </select>
+                </div>
               </div>
               <div className="">
                 <input
@@ -234,6 +267,19 @@ export default function Establishments() {
           </div>
         </div>
       </Modal>
+
+      <AlertMessage
+        open={successOpen}
+        severity="success"
+        message={sucessMessage}
+        onClose={handleSuccessClose}
+      />
+      <AlertMessage
+        open={errorOpen}
+        severity="error"
+        message={errorMessage}
+        onClose={handleErrorClose}
+      />
     </div>
   );
 }

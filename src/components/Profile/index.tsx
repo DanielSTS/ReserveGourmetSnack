@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
 import { useUserInfoContext } from '@/contexts/UserInfoContext';
+import AlertMessage from '../AlertMessage';
 
 export default function Profile() {
   const { userInfo } = useUserInfoContext();
@@ -10,6 +11,20 @@ export default function Profile() {
   const [phone, setPhone] = useState(userInfo?.phone ?? '');
   const [password, setPassword] = useState('');
   const router = useRouter();
+  const [successOpen, setSuccessOpen] = useState(false);
+  const [errorOpen, setErrorOpen] = useState(false);
+  const handleSuccessOpen = () => {
+    setSuccessOpen(true);
+  };
+  const handleSuccessClose = () => {
+    setSuccessOpen(false);
+  };
+  const handleErrorOpen = () => {
+    setErrorOpen(true);
+  };
+  const handleErrorClose = () => {
+    setErrorOpen(false);
+  };
 
   async function handleUpdate(event: any) {
     event.preventDefault();
@@ -89,6 +104,18 @@ export default function Profile() {
             </form>
           </div>
         </div>
+        <AlertMessage
+        open={successOpen}
+        severity="success"
+        message="Dados atualizados com sucesso!"
+        onClose={handleSuccessClose}
+      />
+      <AlertMessage
+        open={errorOpen}
+        severity="error"
+        message="Erro ao atualizar dados!"
+        onClose={handleErrorClose}
+      />
       </section>
     </>
   );

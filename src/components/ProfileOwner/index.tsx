@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
 import { useOwnerInfoContext } from '@/contexts/OwnerInfoContext';
+import AlertMessage from '../AlertMessage';
 
 export default function ProfileOwner() {
   const { owner, establishment } = useOwnerInfoContext();
@@ -28,6 +29,21 @@ export default function ProfileOwner() {
       : new Date()
   );
   const router = useRouter();
+
+  const [successOpen, setSuccessOpen] = useState(false);
+  const [errorOpen, setErrorOpen] = useState(false);
+  const handleSuccessOpen = () => {
+    setSuccessOpen(true);
+  };
+  const handleSuccessClose = () => {
+    setSuccessOpen(false);
+  };
+  const handleErrorOpen = () => {
+    setErrorOpen(true);
+  };
+  const handleErrorClose = () => {
+    setErrorOpen(false);
+  };
 
   async function handleUpdate(event: any) {
     event.preventDefault();
@@ -187,6 +203,18 @@ export default function ProfileOwner() {
             </form>
           </div>
         </div>
+        <AlertMessage
+        open={successOpen}
+        severity="success"
+        message="Dados atualizados com sucesso!"
+        onClose={handleSuccessClose}
+      />
+      <AlertMessage
+        open={errorOpen}
+        severity="error"
+        message="Erro ao atualizar dados!"
+        onClose={handleErrorClose}
+      />
       </section>
     </>
   );

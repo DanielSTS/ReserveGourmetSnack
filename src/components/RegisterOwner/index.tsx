@@ -5,12 +5,28 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
 import FAQ from '../Faq';
+import AlertMessage from '../AlertMessage';
 
 export default function RegisterOwner() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const router = useRouter();
+
+  const [successOpen, setSuccessOpen] = useState(false);
+  const [errorOpen, setErrorOpen] = useState(false);
+  const handleSuccessOpen = () => {
+    setSuccessOpen(true);
+  };
+  const handleSuccessClose = () => {
+    setSuccessOpen(false);
+  };
+  const handleErrorOpen = () => {
+    setErrorOpen(true);
+  };
+  const handleErrorClose = () => {
+    setErrorOpen(false);
+  };
 
   async function handleRegister(event: any) {
     event.preventDefault();
@@ -30,7 +46,7 @@ export default function RegisterOwner() {
   }
 
   return (
-    <div className='flex flex-col items-center justify-center min-h-screen py-16'>
+    <div className="flex flex-col items-center justify-center min-h-screen py-16">
       <div className="bg-white shadow-md rounded m-auto h-auto flex">
         <div className="w-1/3 flex flex-col p-8 gap-16 bg-redMain shadow-md rounded">
           <Image
@@ -98,6 +114,18 @@ export default function RegisterOwner() {
         </div>
       </div>
       <FAQ />
+      <AlertMessage
+        open={successOpen}
+        severity="success"
+        message="Login realizado com sucesso!"
+        onClose={handleSuccessClose}
+      />
+      <AlertMessage
+        open={errorOpen}
+        severity="error"
+        message="Erro ao fazer o login. Verifique suas credenciais."
+        onClose={handleErrorClose}
+      />
     </div>
   );
 }
