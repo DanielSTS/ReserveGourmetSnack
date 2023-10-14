@@ -7,11 +7,13 @@ export default function HomeOwner() {
   const { reservations: reservationsData } = useOwnerInfoContext();
   return (
     <div className="grid grid-cols-2 h-screen">
-      <div className="col-span-2 md:col-span-1 p-4 bg-white rounded shadow m-4 h-auto">
+      <div className="col-span-2 md:col-span-1 p-4 bg-white rounded shadow m-4">
         <h1 className="text-zinc-600 text-2xl">Total de Reservas</h1>
-        <p className="text-zinc-600 text-9xl text-center h-auto">
-          {reservationsData?.length ?? 0}
-        </p>
+        <div className="flex flex-col items-center justify-center h-80">
+          <p className="text-zinc-600 text-9xl text-center h-auto">
+            {reservationsData?.length ?? 0}
+          </p>
+        </div>
       </div>
       <div className="col-span-2 md:col-span-1">
         <Favorites />

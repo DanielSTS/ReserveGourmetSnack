@@ -1,5 +1,5 @@
-import RecoverPassword from '@/components/RecoverPassword';
+import RecoverPasswordOwner from '@/components/RecoverPasswordOwner';
 
 export default function PageRecoverPassword() {
-  return <RecoverPassword />;
+  return <RecoverPasswordOwner />;
 }

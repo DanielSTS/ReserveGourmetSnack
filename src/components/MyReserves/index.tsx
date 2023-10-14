@@ -1,6 +1,6 @@
 'use client';
 
-import { Button, IconButton, Modal } from '@mui/material';
+import { Button, IconButton, Modal, TextField } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
@@ -196,14 +196,16 @@ export default function MyReserves() {
   return (
     <div className="p-4 bg-white rounded shadow m-4">
       <h1 className="text-redMain text-center p-2 text-lg">Minhas Reservas</h1>
-      <DataGrid
-        columns={columns}
-        rows={reservationsData.length ? reservationsData : []}
-        columnVisibilityModel={{
-          id: false
-        }}
-        rowHeight={40}
-      />
+      <div className="h-80">
+        <DataGrid
+          columns={columns}
+          rows={reservationsData.length ? reservationsData : []}
+          columnVisibilityModel={{
+            id: false
+          }}
+          rowHeight={40}
+        />
+      </div>
 
       <Modal open={openModalDelete} onClose={() => setOpenModalDelete(false)}>
         <div className="fixed inset-0 flex items-center justify-center">
@@ -230,61 +232,62 @@ export default function MyReserves() {
 
       <Modal open={openModalEdit} onClose={() => setOpenModalEdit(false)}>
         <div className="fixed inset-0 flex items-center justify-center">
-          <div className="p-4 bg-white rounded shadow  text-center flex flex-col gap-24">
+          <div className="p-4 bg-white rounded shadow  text-center flex flex-col gap-12">
             <h1 className="text-redMain text-2xl">Editar Reserva</h1>
             <form
               className="flex flex-col gap-6 items-center"
               onSubmit={handleEditConfirm}
             >
-              <div className="">
-                <input
-                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  id="quantity"
-                  type="number"
-                  placeholder="Quantidade"
-                  value={editedReservation.numPeople}
-                  onChange={e =>
-                    setEditedReservation(prevState => ({
-                      ...prevState,
-                      numPeople: parseInt(e.target.value, 10)
-                    }))
-                  }
-                />
-              </div>
-              <div className="">
-                <input
-                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  id="notes"
-                  type="text"
-                  placeholder="Observações"
-                  value={editedReservation.observation}
-                  onChange={e =>
-                    setEditedReservation(prevState => ({
-                      ...prevState,
-                      observation: e.target.value
-                    }))
-                  }
-                />
-              </div>
-              <div className="mb-4">
-                <input
-                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  id="calendar"
-                  type="datetime-local"
-                  placeholder="Data"
-                  value={
-                    editedReservation.datetime instanceof Date
-                      ? editedReservation.datetime.toISOString().slice(0, 16)
-                      : ''
-                  }
-                  onChange={e =>
-                    setEditedReservation(prevState => ({
-                      ...prevState,
-                      datetime: new Date(e.target.value)
-                    }))
-                  }
-                />
-              </div>
+              <TextField
+                className="w-full"
+                label="Quantidade"
+                variant="outlined"
+                type="number"
+                placeholder="Quantidade"
+                value={editedReservation.numPeople}
+                onChange={e =>
+                  setEditedReservation(prevState => ({
+                    ...prevState,
+                    numPeople: parseInt(e.target.value, 10)
+                  }))
+                }
+              />
+
+              <TextField
+                className="w-full"
+                label="Observações"
+                variant="outlined"
+                multiline
+                rows={4}
+                placeholder="Observações"
+                value={editedReservation.observation}
+                onChange={e =>
+                  setEditedReservation(prevState => ({
+                    ...prevState,
+                    observation: e.target.value
+                  }))
+                }
+              />
+
+              <TextField
+                className="w-full"
+                label="Data"
+                variant="outlined"
+                type="datetime-local"
+                placeholder="Data"
+                value={
+                  editedReservation.datetime instanceof Date
+                    ? editedReservation.datetime.toISOString().slice(0, 16)
+                    : ''
+                }
+                onChange={e =>
+                  setEditedReservation(prevState => ({
+                    ...prevState,
+                    datetime: new Date(e.target.value + 'Z')
+                  }))
+                }
+              />
+
               <div className="flex justify-between gap-6">
                 <button
                   onClick={handleEditCancel}
@@ -306,18 +309,18 @@ export default function MyReserves() {
 
       <Modal open={openReview} onClose={() => setOpenReview(false)}>
         <div className="fixed inset-0 flex items-center justify-center">
-          <div className="p-4 bg-white rounded shadow  text-center flex flex-col gap-24">
+          <div className="p-4 bg-white rounded shadow  text-center flex flex-col gap-8">
             <h1 className="text-redMain text-2xl">Avaliar</h1>
             <form className="flex flex-col gap-6 items-center">
-              <div className="">
-                <input
-                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  id="notes"
-                  type="text"
-                  placeholder="Comentário"
-                  onChange={e => setComment(e.target.value)}
-                />
-              </div>
+              <TextField
+                className="w-full"
+                label="Comentário"
+                variant="outlined"
+                multiline
+                rows={4}
+                placeholder="Comentário"
+                onChange={e => setComment(e.target.value)}
+              />
             </form>
             <div className="flex justify-between gap-6">
               <button

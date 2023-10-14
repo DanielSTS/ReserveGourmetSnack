@@ -16,14 +16,16 @@ export default function Favorites() {
   return (
     <div className="p-4 bg-white rounded shadow my-4 mr-4">
       <h1 className="text-redMain text-center p-2 text-lg">Favoritos</h1>
-      <DataGrid
-        columns={columns}
-        rows={favorites}
-        rowHeight={40}
-        columnVisibilityModel={{
-          id: false
-        }}
-      />
+      <div className="h-80">
+        <DataGrid
+          columns={columns}
+          rows={favorites}
+          rowHeight={40}
+          columnVisibilityModel={{
+            id: false
+          }}
+        />
+      </div>
     </div>
   );
 }

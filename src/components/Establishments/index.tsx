@@ -1,6 +1,6 @@
 'use client';
 import { useEstablishmentsContext } from '@/contexts/EstablishmentsContext';
-import { Button, Modal } from '@mui/material';
+import { Button, MenuItem, Modal, Select, TextField } from '@mui/material';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { useState } from 'react';
 import axios from 'axios';
@@ -47,9 +47,9 @@ export default function Establishments() {
     const data = {
       userId: localStorage.getItem('id'),
       establishmentId: selectedRow,
-      datetime: datetime,
-      numPeople: numPeople,
-      observation: observation
+      datetime,
+      numPeople,
+      observation
     };
     axios
       .post('http://localhost:3001/reservations', data, {
@@ -158,50 +158,52 @@ export default function Establishments() {
   return (
     <div className="p-4 bg-white rounded shadow mx-4">
       <h1 className="text-redMain text-center p-2 text-lg">Estabelecimentos</h1>
-      <DataGrid
-        columns={columns}
-        rows={establishmentsData}
-        rowHeight={40}
-        columnVisibilityModel={{
-          id: false
-        }}
-      />
+      <div className="h-96">
+        <DataGrid
+          columns={columns}
+          rows={establishmentsData}
+          rowHeight={40}
+          columnVisibilityModel={{
+            id: false
+          }}
+        />
+      </div>
 
       <Modal
         open={openNewReservation}
         onClose={() => setOpenNewReservation(false)}
       >
         <div className="fixed inset-0 flex items-center justify-center">
-          <div className="p-4 bg-white rounded shadow  text-center flex flex-col gap-24">
+          <div className="p-4 bg-white rounded shadow  text-center flex flex-col gap-12">
             <h1 className="text-redMain text-2xl">Criar Reserva</h1>
             <form className="flex flex-col gap-6 items-center">
-              <div className="">
-                <input
-                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  id="quantity"
-                  type="number"
-                  placeholder="Quantidade"
-                  onChange={e => setNumPeople(parseInt(e.target.value, 10))}
-                />
-              </div>
-              <div className="">
-                <input
-                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  id="notes"
-                  type="text"
-                  placeholder="Observações"
-                  onChange={e => setObservation(e.target.value)}
-                />
-              </div>
-              <div className="mb-4">
-                <input
-                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  id="calendar"
-                  type="datetime-local"
-                  placeholder="Data"
-                  onChange={e => setDatetime(new Date(e.target.value))}
-                />
-              </div>
+              <TextField
+                className="w-full"
+                label="Quantidade"
+                variant="outlined"
+                type="number"
+                placeholder="Quantidade"
+                onChange={e => setNumPeople(parseInt(e.target.value, 10))}
+              />
+
+              <TextField
+                className="w-full"
+                label="Observações"
+                variant="outlined"
+                multiline
+                rows={4}
+                placeholder="Observações"
+                onChange={e => setObservation(e.target.value)}
+              />
+
+              <TextField
+                className="w-full"
+                label="Data"
+                variant="outlined"
+                type="datetime-local"
+                placeholder="Data"
+                onChange={e => setDatetime(new Date(e.target.value))}
+              />
             </form>
             <div className="flex justify-between gap-6">
               <button
@@ -223,34 +225,31 @@ export default function Establishments() {
 
       <Modal open={openReview} onClose={() => setOpenReview(false)}>
         <div className="fixed inset-0 flex items-center justify-center">
-          <div className="p-4 bg-white rounded shadow  text-center flex flex-col gap-24">
+          <div className="p-4 bg-white rounded shadow  text-center flex flex-col gap-12">
             <h1 className="text-redMain text-2xl">Avaliar</h1>
             <form className="flex flex-col gap-6 items-center">
-              <div className="">
-                <div className="">
-                  <select
-                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    id="rate"
-                    value={rating}
-                    onChange={e => setRating(Number(e.target.value))}
-                  >
-                    <option value={1}>1</option>
-                    <option value={2}>2</option>
-                    <option value={3}>3</option>
-                    <option value={4}>4</option>
-                    <option value={5}>5</option>
-                  </select>
-                </div>
-              </div>
-              <div className="">
-                <input
-                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  id="notes"
-                  type="text"
-                  placeholder="Comentário"
-                  onChange={e => setComment(e.target.value)}
-                />
-              </div>
+              <Select
+                className="w-full text-left"
+                variant="outlined"
+                value={rating}
+                onChange={e => setRating(Number(e.target.value))}
+              >
+                <MenuItem value={1}>1</MenuItem>
+                <MenuItem value={2}>2</MenuItem>
+                <MenuItem value={3}>3</MenuItem>
+                <MenuItem value={4}>4</MenuItem>
+                <MenuItem value={5}>5</MenuItem>
+              </Select>
+
+              <TextField
+                className="w-full"
+                label="Comentário"
+                variant="outlined"
+                multiline
+                rows={4}
+                placeholder="Comentário"
+                onChange={e => setComment(e.target.value)}
+              />
             </form>
             <div className="flex justify-between gap-6">
               <button
