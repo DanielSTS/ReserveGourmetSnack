@@ -36,7 +36,7 @@ export default function Profile() {
       id: localStorage.getItem('id')
     };
     axios
-      .put('http://localhost:3001/users', newUser, {
+      .put('https://reservegourmetsnackbackend.onrender.com/users', newUser, {
         headers: {
           Authorization: localStorage.getItem('token')
         }

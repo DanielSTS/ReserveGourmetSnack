@@ -53,7 +53,7 @@ export function UserInfoContextProvider({
   async function fetchData() {
     const userId = localStorage.getItem('id');
     if (userId) {
-      await fetch(`http://localhost:3001/users/${userId}`)
+      await fetch(`https://reservegourmetsnackbackend.onrender.com/users/${userId}`)
         .then(response => response.json())
         .then(data => {
           console.log(data as UserInfoData);

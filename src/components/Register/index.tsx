@@ -36,7 +36,7 @@ export default function Register() {
       password
     };
     axios
-      .post('http://localhost:3001/users', newUser)
+      .post('https://reservegourmetsnackbackend.onrender.com/users', newUser)
       .then(() => {
         handleSuccessOpen();
         router.push('/login');

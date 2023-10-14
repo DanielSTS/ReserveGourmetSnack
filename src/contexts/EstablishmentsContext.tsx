@@ -35,7 +35,7 @@ export function EstablishmentsContextProvider({
   >([]);
 
   async function fetchData() {
-    await fetch('http://localhost:3001/establishments')
+    await fetch('https://reservegourmetsnackbackend.onrender.com/establishments')
       .then(response => response.json())
       .then(data => {
         console.log(data as EstablishmentData[]);

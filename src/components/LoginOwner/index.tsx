@@ -34,7 +34,7 @@ export default function LoginOwner() {
       password
     };
     axios
-      .post('http://localhost:3001/login-owner', login)
+      .post('https://reservegourmetsnackbackend.onrender.com/login-owner', login)
       .then(response => {
         localStorage.setItem('token', response.data.token);
         localStorage.setItem('ownerId', response.data.id);

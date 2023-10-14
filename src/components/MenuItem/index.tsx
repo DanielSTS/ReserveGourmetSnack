@@ -17,7 +17,7 @@ export default function MenuItem({ href, label }: MenuItemProps) {
       className={`${
         isActive
           ? 'text-redMain'
-          : 'text-background hover:text-redMain hover:transition hover:duration-300'
+          : 'text-zinc-300 hover:text-redMain hover:transition hover:duration-300'
       } p-4 text-xl font-semibold`}
     >
       {label}

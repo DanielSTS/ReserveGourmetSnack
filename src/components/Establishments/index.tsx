@@ -52,7 +52,7 @@ export default function Establishments() {
       observation
     };
     axios
-      .post('http://localhost:3001/reservations', data, {
+      .post('https://reservegourmetsnackbackend.onrender.com/reservations', data, {
         headers: {
           Authorization: localStorage.getItem('token')
         }
@@ -86,7 +86,7 @@ export default function Establishments() {
       comment
     };
     axios
-      .post('http://localhost:3001/reviews', data, {
+      .post('https://reservegourmetsnackbackend.onrender.com/reviews', data, {
         headers: {
           Authorization: localStorage.getItem('token')
         }

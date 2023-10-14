@@ -66,7 +66,7 @@ export default function ProfileOwner() {
       enabled
     };
     axios
-      .put('http://localhost:3001/establishments', data, {
+      .put('https://reservegourmetsnackbackend.onrender.com/establishments', data, {
         headers: {
           Authorization: localStorage.getItem('token')
         }
