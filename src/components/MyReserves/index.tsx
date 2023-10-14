@@ -174,7 +174,7 @@ export default function MyReserves() {
   const handleConfirmReview = () => {
     const data = {
       userId: localStorage.getItem('id'),
-      establishmentId: selectedRow.establishmentId,
+      reservationId: selectedRow.id,
       comment
     };
     axios
