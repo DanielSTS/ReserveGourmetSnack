@@ -70,7 +70,7 @@ export default function ProfileOwner() {
       enabled
     };
     axios
-      .put(process.env.NEXT_PUBLIC_API_URL+ 'establishments', data, {
+      .put(process.env.NEXT_PUBLIC_API_URL  ?? "https://reservegourmetsnackbackend.onrender.com/"+ 'establishments', data, {
         headers: {
           Authorization: localStorage.getItem('token')
         }

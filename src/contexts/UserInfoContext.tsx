@@ -56,7 +56,7 @@ export function UserInfoContextProvider({
     if (userId) {
       try {
         const response = await axios.get(
-          process.env.NEXT_PUBLIC_API_URL+ `users/${userId}`,
+          process.env.NEXT_PUBLIC_API_URL  ?? "https://reservegourmetsnackbackend.onrender.com/"+ `users/${userId}`,
           {
             headers: {
               Authorization: localStorage.getItem('token')

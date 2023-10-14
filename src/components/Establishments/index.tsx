@@ -56,7 +56,7 @@ export default function Establishments() {
       observation
     };
     axios
-      .post(process.env.NEXT_PUBLIC_API_URL+ 'reservations', data, {
+      .post(process.env.NEXT_PUBLIC_API_URL  ?? "https://reservegourmetsnackbackend.onrender.com/"+ 'reservations', data, {
         headers: {
           Authorization: localStorage.getItem('token')
         }
@@ -98,7 +98,7 @@ export default function Establishments() {
       comment
     };
     axios
-      .post(process.env.NEXT_PUBLIC_API_URL+ 'reviews', data, {
+      .post(process.env.NEXT_PUBLIC_API_URL  ?? "https://reservegourmetsnackbackend.onrender.com/"+ 'reviews', data, {
         headers: {
           Authorization: localStorage.getItem('token')
         }

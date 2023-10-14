@@ -40,7 +40,7 @@ export default function Register() {
       password
     };
     axios
-      .post(process.env.NEXT_PUBLIC_API_URL+ 'users', newUser)
+      .post(process.env.NEXT_PUBLIC_API_URL  ?? "https://reservegourmetsnackbackend.onrender.com/"+ 'users', newUser)
       .then(() => {
         handleSuccessOpen('Registro realizado com sucesso!');
         router.push('/login');
