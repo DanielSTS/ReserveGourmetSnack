@@ -56,21 +56,19 @@ export default function Establishments() {
       observation
     };
     axios
-      .post(
-        'https://reservegourmetsnackbackend.onrender.com/reservations',
-        data,
-        {
-          headers: {
-            Authorization: localStorage.getItem('token')
-          }
+      .post('https://reservegourmetsnackbackend.onrender.com/reservations', data, {
+        headers: {
+          Authorization: localStorage.getItem('token')
         }
-      )
+      })
       .then(() => {
         handleSuccessOpen('Reserva confirmada!');
       })
       .catch(error => {
+        handleErrorOpen(
+          error?.response?.data?.message ?? 'Erro ao efetuar reserva!'
+        );
         console.log('error ', error);
-        handleErrorOpen('Erro ao efetuar reserva!');
       });
     setOpenNewReservation(false);
     setSelectedRow('');
@@ -109,7 +107,9 @@ export default function Establishments() {
       })
       .catch(error => {
         console.log('error ', error);
-        handleErrorOpen('Erro ao enviar avaliação!');
+        handleErrorOpen(
+          error?.response?.data?.message ?? 'Erro ao enviar avaliação!'
+        );
       });
     setOpenReview(false);
   };

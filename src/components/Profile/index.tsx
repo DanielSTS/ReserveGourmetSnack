@@ -14,13 +14,17 @@ export default function Profile() {
   const router = useRouter();
   const [successOpen, setSuccessOpen] = useState(false);
   const [errorOpen, setErrorOpen] = useState(false);
-  const handleSuccessOpen = () => {
+  const [errorMessage, setErrorMessage] = useState('');
+  const [sucessMessage, setSucessMessage] = useState('');
+  const handleSuccessOpen = (message: string) => {
+    setSucessMessage(message);
     setSuccessOpen(true);
   };
   const handleSuccessClose = () => {
     setSuccessOpen(false);
   };
-  const handleErrorOpen = () => {
+  const handleErrorOpen = (message: string) => {
+    setErrorMessage(message);
     setErrorOpen(true);
   };
   const handleErrorClose = () => {
@@ -42,11 +46,13 @@ export default function Profile() {
         }
       })
       .then(() => {
-        handleSuccessOpen();
+        handleSuccessOpen('Dados atualizados com sucesso!');
         router.push('/user/home');
       })
       .catch(error => {
-        handleErrorOpen();
+        handleErrorOpen(
+          error?.response?.data?.message ?? 'Erro ao atualizar dados!'
+        );
         console.log('error ', error);
       });
   }
@@ -110,13 +116,13 @@ export default function Profile() {
         <AlertMessage
           open={successOpen}
           severity="success"
-          message="Dados atualizados com sucesso!"
+          message={sucessMessage}
           onClose={handleSuccessClose}
         />
         <AlertMessage
           open={errorOpen}
           severity="error"
-          message="Erro ao atualizar dados!"
+          message={errorMessage}
           onClose={handleErrorClose}
         />
       </section>

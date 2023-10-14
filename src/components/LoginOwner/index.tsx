@@ -14,19 +14,22 @@ export default function LoginOwner() {
 
   const [successOpen, setSuccessOpen] = useState(false);
   const [errorOpen, setErrorOpen] = useState(false);
-  const handleSuccessOpen = () => {
+  const [errorMessage, setErrorMessage] = useState('');
+  const [sucessMessage, setSucessMessage] = useState('');
+  const handleSuccessOpen = (message: string) => {
+    setSucessMessage(message);
     setSuccessOpen(true);
   };
   const handleSuccessClose = () => {
     setSuccessOpen(false);
   };
-  const handleErrorOpen = () => {
+  const handleErrorOpen = (message: string) => {
+    setErrorMessage(message);
     setErrorOpen(true);
   };
   const handleErrorClose = () => {
     setErrorOpen(false);
   };
-
   async function handleLogin(event: any) {
     event.preventDefault();
     const login = {
@@ -34,19 +37,19 @@ export default function LoginOwner() {
       password
     };
     axios
-      .post(
-        'https://reservegourmetsnackbackend.onrender.com/login-owner',
-        login
-      )
+      .post('https://reservegourmetsnackbackend.onrender.com/login-owner', login)
       .then(response => {
         localStorage.setItem('token', response.data.token);
         localStorage.setItem('ownerId', response.data.id);
-        handleSuccessOpen();
+        handleSuccessOpen('Login realizado com sucesso!');
         router.push('/owner/home');
       })
       .catch(error => {
+        handleErrorOpen(
+          error?.response?.data?.message ??
+            'Erro ao fazer o login. Verifique suas credenciais.'
+        );
         console.log('error ', error);
-        handleErrorOpen();
       });
   }
 
@@ -118,13 +121,13 @@ export default function LoginOwner() {
       <AlertMessage
         open={successOpen}
         severity="success"
-        message="Login realizado com sucesso!"
+        message={sucessMessage}
         onClose={handleSuccessClose}
       />
       <AlertMessage
         open={errorOpen}
         severity="error"
-        message="Erro ao fazer o login. Verifique suas credenciais."
+        message={errorMessage}
         onClose={handleErrorClose}
       />
     </div>

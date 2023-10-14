@@ -3,7 +3,7 @@ import { useEstablishmentsContext } from '@/contexts/EstablishmentsContext';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 
 export default function Favorites() {
-  const favorites = useEstablishmentsContext().slice(0, 5);
+  const favorites = useEstablishmentsContext()?.slice(0, 5);
 
   const columns: GridColDef[] = [
     { field: 'id', headerName: 'ID' },

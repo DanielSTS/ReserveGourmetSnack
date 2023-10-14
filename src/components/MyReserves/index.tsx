@@ -114,21 +114,19 @@ export default function MyReserves() {
       observation: editedReservation.observation
     };
     axios
-      .put(
-        'https://reservegourmetsnackbackend.onrender.com/reservations',
-        data,
-        {
-          headers: {
-            Authorization: localStorage.getItem('token')
-          }
+      .put('https://reservegourmetsnackbackend.onrender.com/reservations', data, {
+        headers: {
+          Authorization: localStorage.getItem('token')
         }
-      )
+      })
       .then(() => {
         handleSuccessOpen('Edição confirmada!');
       })
       .catch(error => {
+        handleErrorOpen(
+          error?.response?.data?.message ?? 'Error ao enviar edição!'
+        );
         console.log('error ', error);
-        handleErrorOpen('Error ao enviar edição!');
       });
     setOpenModalEdit(false);
     setSelectedRow('');
@@ -158,8 +156,10 @@ export default function MyReserves() {
         handleSuccessOpen('Reserva cancelada!');
       })
       .catch(error => {
+        handleErrorOpen(
+          error?.response?.data?.message ?? 'Error ao cancelar reserva!'
+        );
         console.log('error ', error);
-        handleErrorOpen('Error ao cancelar reserva!');
       });
 
     setOpenModalDelete(false);
@@ -187,8 +187,10 @@ export default function MyReserves() {
         handleSuccessOpen('Avaliação enviada!');
       })
       .catch(error => {
+        handleErrorOpen(
+          error?.response?.data?.message ?? 'Error ao enviar avaliação!'
+        );
         console.log('error ', error);
-        handleErrorOpen('Error ao enviar avaliação!');
       });
     setOpenReview(false);
   };

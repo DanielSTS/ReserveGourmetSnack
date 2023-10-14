@@ -1,4 +1,5 @@
 'use client';
+import axios from 'axios';
 import {
   createContext,
   ReactNode,
@@ -42,17 +43,18 @@ export function EstablishmentsContextProvider({
   >([]);
 
   async function fetchData() {
-    await fetch(
-      'https://reservegourmetsnackbackend.onrender.com/establishments'
-    )
-      .then(response => response.json())
-      .then(data => {
-        console.log(data as EstablishmentData[]);
-        setEstablishmentsData(data);
-      })
-      .catch(error => {
-        console.error('Error fetching data:', error);
+    try {
+      const response = await axios.get('https://reservegourmetsnackbackend.onrender.com/establishments', {
+        headers: {
+          Authorization: localStorage.getItem('token')
+        }
       });
+      const data = response.data as EstablishmentData[];
+      console.log(data);
+      setEstablishmentsData(data);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
   }
 
   useEffect(() => {
@@ -60,7 +62,7 @@ export function EstablishmentsContextProvider({
 
     const interval = setInterval(() => {
       void fetchData();
-    }, 300 * 1000);
+    }, 10 * 1000);
 
     return () => {
       clearInterval(interval);

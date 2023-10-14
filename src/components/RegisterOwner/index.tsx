@@ -16,13 +16,17 @@ export default function RegisterOwner() {
 
   const [successOpen, setSuccessOpen] = useState(false);
   const [errorOpen, setErrorOpen] = useState(false);
-  const handleSuccessOpen = () => {
+  const [errorMessage, setErrorMessage] = useState('');
+  const [sucessMessage, setSucessMessage] = useState('');
+  const handleSuccessOpen = (message: string) => {
+    setSucessMessage(message);
     setSuccessOpen(true);
   };
   const handleSuccessClose = () => {
     setSuccessOpen(false);
   };
-  const handleErrorOpen = () => {
+  const handleErrorOpen = (message: string) => {
+    setErrorMessage(message);
     setErrorOpen(true);
   };
   const handleErrorClose = () => {
@@ -39,9 +43,13 @@ export default function RegisterOwner() {
     axios
       .post('https://reservegourmetsnackbackend.onrender.com/owners', newUser)
       .then(() => {
+        handleSuccessOpen('Registro realizado com sucesso!');
         router.push('/owner-login');
       })
       .catch(error => {
+        handleErrorOpen(
+          error?.response?.data?.message ?? 'Erro ao fazer registro!'
+        );
         console.log('error ', error);
       });
   }
@@ -119,13 +127,13 @@ export default function RegisterOwner() {
       <AlertMessage
         open={successOpen}
         severity="success"
-        message="Login realizado com sucesso!"
+        message={sucessMessage}
         onClose={handleSuccessClose}
       />
       <AlertMessage
         open={errorOpen}
         severity="error"
-        message="Erro ao fazer o login. Verifique suas credenciais."
+        message={errorMessage}
         onClose={handleErrorClose}
       />
     </div>

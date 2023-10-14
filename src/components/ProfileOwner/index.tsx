@@ -37,13 +37,17 @@ export default function ProfileOwner() {
 
   const [successOpen, setSuccessOpen] = useState(false);
   const [errorOpen, setErrorOpen] = useState(false);
-  const handleSuccessOpen = () => {
+  const [errorMessage, setErrorMessage] = useState('');
+  const [sucessMessage, setSucessMessage] = useState('');
+  const handleSuccessOpen = (message: string) => {
+    setSucessMessage(message);
     setSuccessOpen(true);
   };
   const handleSuccessClose = () => {
     setSuccessOpen(false);
   };
-  const handleErrorOpen = () => {
+  const handleErrorOpen = (message: string) => {
+    setErrorMessage(message);
     setErrorOpen(true);
   };
   const handleErrorClose = () => {
@@ -66,21 +70,19 @@ export default function ProfileOwner() {
       enabled
     };
     axios
-      .put(
-        'https://reservegourmetsnackbackend.onrender.com/establishments',
-        data,
-        {
-          headers: {
-            Authorization: localStorage.getItem('token')
-          }
+      .put('https://reservegourmetsnackbackend.onrender.com/establishments', data, {
+        headers: {
+          Authorization: localStorage.getItem('token')
         }
-      )
+      })
       .then(() => {
-        handleSuccessOpen();
+        handleSuccessOpen('Dados atualizados com sucesso!');
         router.push('/owner/home');
       })
       .catch(error => {
-        handleErrorOpen();
+        handleErrorOpen(
+          error?.response?.data?.message ?? 'Erro ao atualizar dados!'
+        );
         console.log('error ', error);
       });
   }
@@ -213,13 +215,12 @@ export default function ProfileOwner() {
         <AlertMessage
           open={successOpen}
           severity="success"
-          message="Dados atualizados com sucesso!"
+          message={sucessMessage}
           onClose={handleSuccessClose}
         />
         <AlertMessage
           open={errorOpen}
-          severity="error"
-          message="Erro ao atualizar dados!"
+          severity={errorMessage}
           onClose={handleErrorClose}
         />
       </section>

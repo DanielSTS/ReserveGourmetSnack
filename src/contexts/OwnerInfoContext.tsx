@@ -1,4 +1,5 @@
 'use client';
+import axios from 'axios';
 import {
   createContext,
   ReactNode,
@@ -67,17 +68,21 @@ export function OwnerInfoContextProvider({
   async function fetchData() {
     const ownerId = localStorage.getItem('ownerId');
     if (ownerId) {
-      await fetch(
-        `https://reservegourmetsnackbackend.onrender.com/owners/${ownerId}`
-      )
-        .then(response => response.json())
-        .then(data => {
-          console.log(data as OwnerInfoData);
-          setOwnerInfoData(data);
-        })
-        .catch(error => {
-          console.error('Error fetching data:', error);
-        });
+      try {
+        const response = await axios.get(
+          `https://reservegourmetsnackbackend.onrender.com/owners/${ownerId}`,
+          {
+            headers: {
+              Authorization: localStorage.getItem('token')
+            }
+          }
+        );
+        const data = response.data as OwnerInfoData;
+        console.log(data);
+        setOwnerInfoData(data);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
     }
   }
 
@@ -86,7 +91,7 @@ export function OwnerInfoContextProvider({
 
     const interval = setInterval(() => {
       void fetchData();
-    }, 300 * 1000);
+    }, 5 * 1000);
 
     return () => {
       clearInterval(interval);
