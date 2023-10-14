@@ -12,7 +12,7 @@ import AlertMessage from '../AlertMessage';
 export default function MyReserves() {
   const [openModalDelete, setOpenModalDelete] = useState(false);
   const [openModalEdit, setOpenModalEdit] = useState(false);
-  const [selectedRow, setSelectedRow] = useState<string>('');
+  const [selectedRow, setSelectedRow] = useState('');
   const { reservations: reservationsData } = useUserInfoContext();
   const [openReview, setOpenReview] = useState(false);
 
@@ -49,49 +49,46 @@ export default function MyReserves() {
     { field: 'id', headerName: 'ID' },
     { field: 'establishmentName', headerName: 'Estabelecimento', width: 160 },
     { field: 'category', headerName: 'Categoria', width: 130 },
-    { field: 'datetime', headerName: 'Horário', width: 120 },
+    { field: 'datetime', headerName: 'Horário', width: 200 },
     {
       field: 'numPeople',
       headerName: 'Quantidade',
+      width: 100
+    },
+    {
+      field: 'actions',
+      headerName: 'Avaliar',
       width: 200,
       renderCell: params => (
-        <div className="flex gap-2 items-center">
-          <>{params.row.numPeople}</>
+        <>
           <IconButton
             aria-label="Editar"
-            onClick={() => handleEdit(params.row.id)}
+            onClick={() => handleEdit(params.row)}
           >
             <EditIcon />
           </IconButton>
           <IconButton
             aria-label="Excluir"
-            onClick={() => handleDelete(params.row.id)}
+            onClick={() => handleDelete(params.row)}
           >
             <DeleteIcon />
           </IconButton>
-        </div>
-      )
-    },
-    {
-      field: 'actions',
-      headerName: 'Avaliar',
-      width: 150,
-      renderCell: params => (
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={() => handleReviewClick(params.row)}
-        >
-          Avaliar
-        </Button>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => handleReviewClick(params.row)}
+          >
+            Avaliar
+          </Button>
+        </>
       )
     }
   ];
 
-  function handleEdit(id: string): void {
-    setSelectedRow(id);
+  function handleEdit(params: any): void {
+    setSelectedRow(params);
     const selectedReservation = reservationsData.find(
-      reservation => reservation.id === id
+      reservation => reservation.id === params.id
     )!;
     setEditedReservation({
       id: selectedReservation.id,
@@ -133,8 +130,8 @@ export default function MyReserves() {
     setSelectedRow('');
   }
 
-  function handleDelete(id: string): void {
-    setSelectedRow(id);
+  function handleDelete(params: any): void {
+    setSelectedRow(params);
     setOpenModalDelete(true);
   }
 
@@ -150,7 +147,7 @@ export default function MyReserves() {
           Authorization: localStorage.getItem('token')
         },
         data: {
-          id: selectedRow
+          id: selectedRow.id
         }
       })
       .then(() => {
@@ -166,14 +163,14 @@ export default function MyReserves() {
   }
 
   const handleReviewClick = (params: any) => {
-    setSelectedRow(params.row);
+    setSelectedRow(params);
     setOpenReview(true);
   };
 
   const handleConfirmReview = () => {
     const data = {
       userId: localStorage.getItem('id'),
-      establishmentId: selectedRow,
+      establishmentId: selectedRow.establishmentId,
       comment
     };
     axios

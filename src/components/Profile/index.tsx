@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import axios from 'axios';
 import { useUserInfoContext } from '@/contexts/UserInfoContext';
 import AlertMessage from '../AlertMessage';
+import { TextField } from '@mui/material';
 
 export default function Profile() {
   const { userInfo } = useUserInfoContext();
@@ -41,9 +42,11 @@ export default function Profile() {
         }
       })
       .then(() => {
+        handleSuccessOpen();
         router.push('/user/home');
       })
       .catch(error => {
+        handleErrorOpen();
         console.log('error ', error);
       });
   }
@@ -65,30 +68,30 @@ export default function Profile() {
               onSubmit={handleUpdate}
             >
               <div className="">
-                <input
-                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  id="name"
-                  type="text"
-                  placeholder="Nome"
+                <TextField
+                  className="w-full"
+                  label="Nome"
+                  variant="outlined"
                   value={name}
                   onChange={e => setName(e.target.value)}
                 />
               </div>
+
               <div className="">
-                <input
-                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  id="password"
+                <TextField
+                  className="w-full"
+                  label="Password"
+                  variant="outlined"
                   type="password"
-                  placeholder="Password"
                   onChange={e => setPassword(e.target.value)}
                 />
               </div>
+
               <div className="mb-4">
-                <input
-                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  id="phone"
-                  type="text"
-                  placeholder="Telefone"
+                <TextField
+                  className="w-full"
+                  label="Telefone"
+                  variant="outlined"
                   value={phone}
                   onChange={e => setPhone(e.target.value)}
                 />
@@ -105,17 +108,17 @@ export default function Profile() {
           </div>
         </div>
         <AlertMessage
-        open={successOpen}
-        severity="success"
-        message="Dados atualizados com sucesso!"
-        onClose={handleSuccessClose}
-      />
-      <AlertMessage
-        open={errorOpen}
-        severity="error"
-        message="Erro ao atualizar dados!"
-        onClose={handleErrorClose}
-      />
+          open={successOpen}
+          severity="success"
+          message="Dados atualizados com sucesso!"
+          onClose={handleSuccessClose}
+        />
+        <AlertMessage
+          open={errorOpen}
+          severity="error"
+          message="Erro ao atualizar dados!"
+          onClose={handleErrorClose}
+        />
       </section>
     </>
   );

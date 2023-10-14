@@ -1,40 +1,24 @@
 'use client';
+import { useEstablishmentsContext } from '@/contexts/EstablishmentsContext';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 
 export default function Favorites() {
+  const favorites = useEstablishmentsContext().slice(0, 5);
+
   const columns: GridColDef[] = [
     { field: 'id', headerName: 'ID' },
-    { field: 'nome', headerName: 'Nome', width: 150 },
-    { field: 'categoria', headerName: 'Categoria', width: 150 },
-    { field: 'localizacao', headerName: 'Localização', width: 150 }
+    { field: 'name', headerName: 'Nome', width: 150 },
+    { field: 'category', headerName: 'Categoria', width: 150 },
+    { field: 'address', headerName: 'Localização', width: 150 },
+    { field: 'rating', headerName: 'Avaliação', width: 150 }
   ];
 
-  const rows = [
-    {
-      id: 1,
-      nome: 'Restaurante 1',
-      categoria: 'Categoria 1',
-      localizacao: 'Localização 1'
-    },
-    {
-      id: 2,
-      nome: 'Restaurante 2',
-      categoria: 'Categoria 2',
-      localizacao: 'Localização 2'
-    },
-    {
-      id: 3,
-      nome: 'Restaurante 3',
-      categoria: 'Categoria 1',
-      localizacao: 'Localização 3'
-    }
-  ];
   return (
     <div className="p-4 bg-white rounded shadow my-4 mr-4">
       <h1 className="text-redMain text-center p-2 text-lg">Favoritos</h1>
       <DataGrid
         columns={columns}
-        rows={rows}
+        rows={favorites}
         rowHeight={40}
         columnVisibilityModel={{
           id: false

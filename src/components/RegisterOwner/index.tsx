@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import axios from 'axios';
 import FAQ from '../Faq';
 import AlertMessage from '../AlertMessage';
+import { TextField } from '@mui/material';
 
 export default function RegisterOwner() {
   const [name, setName] = useState('');
@@ -36,7 +37,7 @@ export default function RegisterOwner() {
       password
     };
     axios
-      .post('http://localhost:3001/users', newUser)
+      .post('http://localhost:3001/owners', newUser)
       .then(() => {
         router.push('/owner-login');
       })
@@ -46,7 +47,7 @@ export default function RegisterOwner() {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen py-16">
+    <div className="flex flex-col items-center justify-center min-h-screen py-32 gap-10">
       <div className="bg-white shadow-md rounded m-auto h-auto flex">
         <div className="w-1/3 flex flex-col p-8 gap-16 bg-redMain shadow-md rounded">
           <Image
@@ -68,7 +69,7 @@ export default function RegisterOwner() {
           </Link>
         </div>
         <div className="w-2/3 p-4  flex flex-col gap-4">
-          <h2 className="text-2xl font-bold mb-6 text-center text-redMain">
+          <h2 className="text-2xl font-bold mb-6 mt-4 text-center text-redMain">
             Criar Conta Admin
           </h2>
           <form
@@ -76,29 +77,30 @@ export default function RegisterOwner() {
             onSubmit={handleRegister}
           >
             <div className="mb-4">
-              <input
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                id="username"
-                type="text"
-                placeholder="Username"
+              <TextField
+                className="w-full"
+                label="Username"
+                variant="outlined"
                 onChange={e => setName(e.target.value)}
               />
             </div>
+
             <div className="mb-4">
-              <input
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                id="email"
+              <TextField
+                className="w-full"
+                label="Email"
+                variant="outlined"
                 type="email"
-                placeholder="Email"
                 onChange={e => setEmail(e.target.value)}
               />
             </div>
+
             <div className="mb-4">
-              <input
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                id="password"
+              <TextField
+                className="w-full"
+                label="Password"
+                variant="outlined"
                 type="password"
-                placeholder="Password"
                 onChange={e => setPassword(e.target.value)}
               />
             </div>

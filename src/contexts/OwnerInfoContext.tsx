@@ -41,6 +41,7 @@ type EstablishmentDto = {
   address: string;
   category: string;
   maxCapacity: number;
+  enabled: boolean;
 };
 
 export type OwnerInfoData = {

@@ -16,7 +16,7 @@ export default function Establishments() {
   const [numPeople, setNumPeople] = useState(0);
   const [observation, setObservation] = useState('');
 
-  const [rate, setRate] = useState(5);
+  const [rating, setRating] = useState(5);
   const [comment, setComment] = useState('');
 
   const [successOpen, setSuccessOpen] = useState(false);
@@ -39,7 +39,7 @@ export default function Establishments() {
   };
 
   const handleReserveClick = (params: any) => {
-    setSelectedRow(params.row);
+    setSelectedRow(params.id);
     setOpenNewReservation(true);
   };
 
@@ -58,11 +58,11 @@ export default function Establishments() {
         }
       })
       .then(() => {
-        handleSuccessOpen('Reserva confirmada!')
+        handleSuccessOpen('Reserva confirmada!');
       })
       .catch(error => {
         console.log('error ', error);
-        handleErrorOpen('Erro ao efetuar reserva!')
+        handleErrorOpen('Erro ao efetuar reserva!');
       });
     setOpenNewReservation(false);
     setSelectedRow('');
@@ -74,7 +74,7 @@ export default function Establishments() {
   };
 
   const handleReviewClick = (params: any) => {
-    setSelectedRow(params.row);
+    setSelectedRow(params.id);
     setOpenReview(true);
   };
 
@@ -82,7 +82,7 @@ export default function Establishments() {
     const data = {
       userId: localStorage.getItem('id'),
       establishmentId: selectedRow,
-      rate,
+      rating,
       comment
     };
     axios
@@ -92,11 +92,11 @@ export default function Establishments() {
         }
       })
       .then(() => {
-        handleSuccessOpen('Avaliação enviada!')
+        handleSuccessOpen('Avaliação enviada!');
       })
       .catch(error => {
         console.log('error ', error);
-        handleErrorOpen('Erro ao enviar avaliação!')
+        handleErrorOpen('Erro ao enviar avaliação!');
       });
     setOpenReview(false);
   };
@@ -114,14 +114,16 @@ export default function Establishments() {
       field: 'state',
       headerName: 'Aberto',
       width: 200,
-      valueGetter: params => 'open'
+      valueGetter: params => (params.row.enabled ? 'ativo' : 'inativo')
     },
     {
       field: 'hour',
       headerName: 'Horário de Funcionamento',
       width: 300,
       valueGetter: params =>
-        params.row.openingHoursStart + ' - ' + params.row.openingHoursEnd
+        new Date(params.row.openingHoursStart).toLocaleTimeString() +
+        ' - ' +
+        new Date(params.row.openingHoursEnd).toLocaleTimeString()
     },
     {
       field: 'reserve',
@@ -155,7 +157,7 @@ export default function Establishments() {
 
   return (
     <div className="p-4 bg-white rounded shadow mx-4">
-      <h1 className="text-redMain text-center p-2 text-lg">Restaurantes</h1>
+      <h1 className="text-redMain text-center p-2 text-lg">Estabelecimentos</h1>
       <DataGrid
         columns={columns}
         rows={establishmentsData}
@@ -229,8 +231,8 @@ export default function Establishments() {
                   <select
                     className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                     id="rate"
-                    value={rate}
-                    onChange={e => setRate(Number(e.target.value))}
+                    value={rating}
+                    onChange={e => setRating(Number(e.target.value))}
                   >
                     <option value={1}>1</option>
                     <option value={2}>2</option>

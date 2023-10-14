@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import axios from 'axios';
 import { useOwnerInfoContext } from '@/contexts/OwnerInfoContext';
 import AlertMessage from '../AlertMessage';
+import { Checkbox, MenuItem, Select, TextField } from '@mui/material';
 
 export default function ProfileOwner() {
   const { owner, establishment } = useOwnerInfoContext();
@@ -13,11 +14,13 @@ export default function ProfileOwner() {
     establishment?.name ?? ''
   );
   const [phone, setPhone] = useState(establishment?.phone ?? '');
-  const [category, setCategory] = useState(establishment?.category || '');
-  const [maxCapacity, setMaxCapacity] = useState(
-    establishment?.maxCapacity || 0
+  const [category, setCategory] = useState(
+    establishment?.category ?? 'restaurante'
   );
-  const [address, setAddress] = useState(establishment?.address || '');
+  const [maxCapacity, setMaxCapacity] = useState(
+    establishment?.maxCapacity ?? 0
+  );
+  const [address, setAddress] = useState(establishment?.address ?? '');
   const [openingHoursStart, setOpeningHoursStart] = useState(
     establishment?.openingHoursStart
       ? new Date(establishment.openingHoursStart)
@@ -28,6 +31,8 @@ export default function ProfileOwner() {
       ? new Date(establishment.openingHoursEnd)
       : new Date()
   );
+
+  const [enabled, setEnabled] = useState(establishment?.enabled ?? false);
   const router = useRouter();
 
   const [successOpen, setSuccessOpen] = useState(false);
@@ -57,7 +62,8 @@ export default function ProfileOwner() {
       address: address,
       openingHoursStart,
       openingHoursEnd,
-      ownerId: localStorage.getItem('ownerId')
+      ownerId: localStorage.getItem('ownerId'),
+      enabled
     };
     axios
       .put('http://localhost:3001/establishments', data, {
@@ -66,9 +72,11 @@ export default function ProfileOwner() {
         }
       })
       .then(() => {
+        handleSuccessOpen();
         router.push('/owner/home');
       })
       .catch(error => {
+        handleErrorOpen();
         console.log('error ', error);
       });
   }
@@ -79,7 +87,7 @@ export default function ProfileOwner() {
         className={'flex flex-col  p-8 items-center justify-around text-center'}
       >
         <div className="bg-white shadow-md rounded m-auto h-auto flex">
-          <div className="px-16 rounded shadow py-4 flex flex-col gap-4">
+          <div className="px-32 rounded shadow py-4 flex flex-col gap-4">
             <h2 className="text-2xl font-bold mb-2 text-center text-redMain">
               Atualizar dados
             </h2>
@@ -87,85 +95,70 @@ export default function ProfileOwner() {
               className="flex flex-col gap-4 items-center"
               onSubmit={handleUpdate}
             >
-              <div className="">
-                <input
-                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  id="owner-name"
-                  type="text"
-                  placeholder="Nome do Administrador"
-                  value={ownerName}
-                  onChange={e => setOwnerName(e.target.value)}
-                />
-              </div>
-              <div className="">
-                <input
-                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  id="password"
-                  type="password"
-                  placeholder="Password"
-                  value={password}
-                  onChange={e => setPassword(e.target.value)}
-                />
-              </div>
-              <div className="">
-                <input
-                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  id="establishment-name"
-                  type="text"
-                  placeholder="Nome do Estabelecimento"
-                  value={establishmentName}
-                  onChange={e => setEstablishmentName(e.target.value)}
-                />
-              </div>
-              <div className="">
-                <input
-                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  id="phone"
-                  type="text"
-                  placeholder="Telefone"
-                  value={phone}
-                  onChange={e => setPhone(e.target.value)}
-                />
-              </div>
-              <div className="">
-                <select
-                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  id="category"
-                  value={category}
-                  onChange={e => setCategory(e.target.value)}
-                >
-                  <option value="">Selecione uma opção</option>
-                  <option value="restaurante">Restaurante</option>
-                  <option value="cafe">Café</option>
-                  <option value="lanchonete">Lanchonete</option>
-                </select>
-              </div>
-              <div className="">
-                <input
-                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  id="max-capacity"
-                  type="number"
-                  placeholder="Capacidade Máxima"
-                  value={maxCapacity}
-                  onChange={e => setMaxCapacity(parseInt(e.target.value, 10))}
-                />
-              </div>
-              <div className="">
-                <input
-                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  id="address"
-                  type="text"
-                  placeholder="Localização"
-                  value={address}
-                  onChange={e => setAddress(e.target.value)}
-                />
-              </div>
-              <div className="">
-                <input
-                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              <TextField
+                id="owner-name"
+                label="Nome do Administrador"
+                value={ownerName}
+                onChange={e => setOwnerName(e.target.value)}
+              />
+
+              <TextField
+                id="password"
+                label="Password"
+                type="password"
+                value={password}
+                onChange={e => setPassword(e.target.value)}
+              />
+
+              <TextField
+                id="establishment-name"
+                label="Nome do Estabelecimento"
+                type="text"
+                placeholder="Nome do Estabelecimento"
+                value={establishmentName}
+                onChange={e => setEstablishmentName(e.target.value)}
+              />
+
+              <TextField
+                id="phone"
+                label="Telefone"
+                type="text"
+                placeholder="Telefone"
+                value={phone}
+                onChange={e => setPhone(e.target.value)}
+              />
+
+              <Select
+                id="category"
+                value={category}
+                onChange={e => setCategory(e.target.value)}
+              >
+                <MenuItem value="restaurante">Restaurante</MenuItem>
+                <MenuItem value="cafe">Café</MenuItem>
+                <MenuItem value="lanchonete">Lanchonete</MenuItem>
+              </Select>
+
+              <TextField
+                id="max-capacity"
+                type="number"
+                label="Capacidade Máxima"
+                value={maxCapacity}
+                onChange={e => setMaxCapacity(parseInt(e.target.value, 10))}
+              />
+
+              <TextField
+                id="address"
+                type="text"
+                label="Localização"
+                value={address}
+                onChange={e => setAddress(e.target.value)}
+              />
+
+              <div className="flex justify-between gap-4">
+                <TextField
                   id="opening_hours_start"
                   type="time"
-                  placeholder="Horário Inicial"
+                  label="Horário Inicial"
                   value={openingHoursStart.toISOString().substring(11, 16)}
                   onChange={e => {
                     const [hours, minutes] = e.target.value.split(':');
@@ -175,13 +168,11 @@ export default function ProfileOwner() {
                     setOpeningHoursStart(date);
                   }}
                 />
-              </div>
-              <div className="">
-                <input
-                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+
+                <TextField
                   id="opening_hours_end"
                   type="time"
-                  placeholder="Horário Final"
+                  label="Horário Final"
                   value={openingHoursEnd.toISOString().substring(11, 16)}
                   onChange={e => {
                     const [hours, minutes] = e.target.value.split(':');
@@ -191,6 +182,18 @@ export default function ProfileOwner() {
                     setOpeningHoursEnd(date);
                   }}
                 />
+              </div>
+
+              <div>
+                <label htmlFor="enabled" className="flex items-center">
+                  <input
+                    type="checkbox"
+                    id="enabled"
+                    checked={enabled}
+                    onChange={e => setEnabled(e.target.checked)}
+                  />
+                  <span className="ml-2 text-zinc-800">Ativar</span>
+                </label>
               </div>
               <div className="flex items-center justify-between">
                 <button
@@ -204,17 +207,17 @@ export default function ProfileOwner() {
           </div>
         </div>
         <AlertMessage
-        open={successOpen}
-        severity="success"
-        message="Dados atualizados com sucesso!"
-        onClose={handleSuccessClose}
-      />
-      <AlertMessage
-        open={errorOpen}
-        severity="error"
-        message="Erro ao atualizar dados!"
-        onClose={handleErrorClose}
-      />
+          open={successOpen}
+          severity="success"
+          message="Dados atualizados com sucesso!"
+          onClose={handleSuccessClose}
+        />
+        <AlertMessage
+          open={errorOpen}
+          severity="error"
+          message="Erro ao atualizar dados!"
+          onClose={handleErrorClose}
+        />
       </section>
     </>
   );

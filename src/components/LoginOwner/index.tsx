@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
 import AlertMessage from '../AlertMessage';
+import { TextField } from '@mui/material';
 
 export default function LoginOwner() {
   const router = useRouter();
@@ -75,18 +76,21 @@ export default function LoginOwner() {
           onSubmit={handleLogin}
         >
           <div className="mb-4">
-            <input
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              id="email"
+            <TextField
+              className="w-full"
+              label="Email"
+              variant="outlined"
               type="email"
               placeholder="Email"
               onChange={e => setEmail(e.target.value)}
             />
           </div>
+
           <div className="">
-            <input
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              id="password"
+            <TextField
+              className="w-full"
+              label="Password"
+              variant="outlined"
               type="password"
               placeholder="Password"
               onChange={e => setPassword(e.target.value)}
