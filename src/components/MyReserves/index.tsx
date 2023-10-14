@@ -12,7 +12,7 @@ import AlertMessage from '../AlertMessage';
 export default function MyReserves() {
   const [openModalDelete, setOpenModalDelete] = useState(false);
   const [openModalEdit, setOpenModalEdit] = useState(false);
-  const [selectedRow, setSelectedRow] = useState('');
+  const [selectedRow, setSelectedRow] = useState<any>('');
   const { reservations: reservationsData } = useUserInfoContext();
   const [openReview, setOpenReview] = useState(false);
 
