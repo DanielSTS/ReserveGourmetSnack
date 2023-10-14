@@ -21,6 +21,13 @@ export type EstablishmentData = {
   openingHoursEnd: Date;
   address: string;
   category: string;
+  reviews: ReviewDto[];
+};
+
+export type ReviewDto = {
+  id: string;
+  rating: number;
+  comment: string;
 };
 
 type EstablishmentsProviderProps = {
@@ -35,7 +42,9 @@ export function EstablishmentsContextProvider({
   >([]);
 
   async function fetchData() {
-    await fetch('https://reservegourmetsnackbackend.onrender.com/establishments')
+    await fetch(
+      'https://reservegourmetsnackbackend.onrender.com/establishments'
+    )
       .then(response => response.json())
       .then(data => {
         console.log(data as EstablishmentData[]);

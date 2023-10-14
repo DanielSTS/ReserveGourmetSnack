@@ -15,7 +15,12 @@ export default function ReservesOwner() {
       headerName: 'Quantidade',
       width: 200
     },
-    { field: 'observation', headerName: 'Observações', width: 130 }
+    { field: 'observation', headerName: 'Observações', width: 130 },
+    {
+      field: 'comment',
+      headerName: 'Comentários',
+      width: 130
+    }
   ];
 
   return (

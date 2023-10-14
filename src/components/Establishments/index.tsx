@@ -1,5 +1,8 @@
 'use client';
-import { useEstablishmentsContext } from '@/contexts/EstablishmentsContext';
+import {
+  ReviewDto,
+  useEstablishmentsContext
+} from '@/contexts/EstablishmentsContext';
 import { Button, MenuItem, Modal, Select, TextField } from '@mui/material';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { useState } from 'react';
@@ -9,7 +12,8 @@ import AlertMessage from '../AlertMessage';
 export default function Establishments() {
   const [openNewReservation, setOpenNewReservation] = useState(false);
   const [openReview, setOpenReview] = useState(false);
-  const [selectedRow, setSelectedRow] = useState('');
+  const [openReviewHistory, setOpenReviewHistory] = useState(false);
+  const [selectedRow, setSelectedRow] = useState<any>('');
   const establishmentsData = useEstablishmentsContext();
 
   const [datetime, setDatetime] = useState(new Date());
@@ -39,24 +43,28 @@ export default function Establishments() {
   };
 
   const handleReserveClick = (params: any) => {
-    setSelectedRow(params.id);
+    setSelectedRow(params);
     setOpenNewReservation(true);
   };
 
   const handleConfirmReserve = () => {
     const data = {
       userId: localStorage.getItem('id'),
-      establishmentId: selectedRow,
+      establishmentId: selectedRow.id,
       datetime,
       numPeople,
       observation
     };
     axios
-      .post('https://reservegourmetsnackbackend.onrender.com/reservations', data, {
-        headers: {
-          Authorization: localStorage.getItem('token')
+      .post(
+        'https://reservegourmetsnackbackend.onrender.com/reservations',
+        data,
+        {
+          headers: {
+            Authorization: localStorage.getItem('token')
+          }
         }
-      })
+      )
       .then(() => {
         handleSuccessOpen('Reserva confirmada!');
       })
@@ -74,14 +82,19 @@ export default function Establishments() {
   };
 
   const handleReviewClick = (params: any) => {
-    setSelectedRow(params.id);
+    setSelectedRow(params);
     setOpenReview(true);
+  };
+
+  const handleReviewHistoryClick = (params: any) => {
+    setSelectedRow(params);
+    setOpenReviewHistory(true);
   };
 
   const handleConfirmReview = () => {
     const data = {
       userId: localStorage.getItem('id'),
-      establishmentId: selectedRow,
+      establishmentId: selectedRow.id,
       rating,
       comment
     };
@@ -133,23 +146,38 @@ export default function Establishments() {
         <Button
           variant="contained"
           color="primary"
-          onClick={() => handleReserveClick(params)}
+          onClick={() => handleReserveClick(params.row)}
         >
           Reservar
         </Button>
       )
     },
     {
-      field: 'actions',
+      field: 'review',
       headerName: 'Avaliar',
       width: 150,
       renderCell: params => (
         <Button
           variant="contained"
           color="primary"
-          onClick={() => handleReviewClick(params)}
+          onClick={() => handleReviewClick(params.row)}
         >
           Avaliar
+        </Button>
+      )
+    },
+
+    {
+      field: 'actions',
+      headerName: 'Avaliações',
+      width: 150,
+      renderCell: params => (
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => handleReviewHistoryClick(params.row)}
+        >
+          Avaliações
         </Button>
       )
     }
@@ -263,6 +291,40 @@ export default function Establishments() {
                 className="border-2 border-white bg-redMain text-white font-bold p-2 px-8 rounded-3xl focus:outline-none focus:shadow-outline"
               >
                 Enviar
+              </button>
+            </div>
+          </div>
+        </div>
+      </Modal>
+
+      <Modal
+        open={openReviewHistory}
+        onClose={() => setOpenReviewHistory(false)}
+      >
+        <div className="fixed inset-0 flex items-center justify-center">
+          <div className="p-4 bg-white rounded shadow text-center flex flex-col gap-12">
+            <h1 className="text-redMain text-2xl">Avaliações</h1>
+            <div className="flex gap-4">
+              <div className="overflow-y-auto max-h-56">
+                {selectedRow?.reviews?.map(
+                  (review: ReviewDto, index: number) => (
+                    <div
+                      key={index}
+                      className="border border-gray-300 p-2 m-4 rounded text-zinc-600 flex gap-2"
+                    >
+                      <h2 className="font-bold">{review.rating}</h2>
+                      <p>{review.comment}</p>
+                    </div>
+                  )
+                )}
+              </div>
+            </div>
+            <div className="flex justify-between gap-6">
+              <button
+                onClick={() => setOpenReviewHistory(false)}
+                className="border-2 border-zinc-400 bg-white text-zinc-400 font-bold p-2 px-8 rounded-3xl focus:outline-none focus:shadow-outline"
+              >
+                Sair
               </button>
             </div>
           </div>

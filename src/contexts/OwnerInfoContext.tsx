@@ -24,6 +24,7 @@ export type ReservationDto = {
   datetime: Date;
   numPeople: number;
   observation: string;
+  comment: string;
 };
 
 type OwnerDto = {
@@ -66,7 +67,9 @@ export function OwnerInfoContextProvider({
   async function fetchData() {
     const ownerId = localStorage.getItem('ownerId');
     if (ownerId) {
-      await fetch(`https://reservegourmetsnackbackend.onrender.com/owners/${ownerId}`)
+      await fetch(
+        `https://reservegourmetsnackbackend.onrender.com/owners/${ownerId}`
+      )
         .then(response => response.json())
         .then(data => {
           console.log(data as OwnerInfoData);

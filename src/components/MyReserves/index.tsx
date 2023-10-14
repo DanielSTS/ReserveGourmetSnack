@@ -57,7 +57,7 @@ export default function MyReserves() {
     },
     {
       field: 'actions',
-      headerName: 'Avaliar',
+      headerName: '',
       width: 200,
       renderCell: params => (
         <>
@@ -114,11 +114,15 @@ export default function MyReserves() {
       observation: editedReservation.observation
     };
     axios
-      .put('https://reservegourmetsnackbackend.onrender.com/reservations', data, {
-        headers: {
-          Authorization: localStorage.getItem('token')
+      .put(
+        'https://reservegourmetsnackbackend.onrender.com/reservations',
+        data,
+        {
+          headers: {
+            Authorization: localStorage.getItem('token')
+          }
         }
-      })
+      )
       .then(() => {
         handleSuccessOpen('Edição confirmada!');
       })

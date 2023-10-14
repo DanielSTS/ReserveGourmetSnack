@@ -66,11 +66,15 @@ export default function ProfileOwner() {
       enabled
     };
     axios
-      .put('https://reservegourmetsnackbackend.onrender.com/establishments', data, {
-        headers: {
-          Authorization: localStorage.getItem('token')
+      .put(
+        'https://reservegourmetsnackbackend.onrender.com/establishments',
+        data,
+        {
+          headers: {
+            Authorization: localStorage.getItem('token')
+          }
         }
-      })
+      )
       .then(() => {
         handleSuccessOpen();
         router.push('/owner/home');
