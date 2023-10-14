@@ -39,7 +39,7 @@ export default function Login() {
       password
     };
     axios
-      .post('https://reservegourmetsnackbackend.onrender.com/login', login)
+      .post(process.env.NEXT_PUBLIC_API_URL+ 'login', login)
       .then(response => {
         localStorage.setItem('token', response.data.token);
         localStorage.setItem('id', response.data.id);

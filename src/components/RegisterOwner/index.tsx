@@ -41,7 +41,7 @@ export default function RegisterOwner() {
       password
     };
     axios
-      .post('https://reservegourmetsnackbackend.onrender.com/owners', newUser)
+      .post(process.env.NEXT_PUBLIC_API_URL+ 'owners', newUser)
       .then(() => {
         handleSuccessOpen('Registro realizado com sucesso!');
         router.push('/owner-login');

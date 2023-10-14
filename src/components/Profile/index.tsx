@@ -40,7 +40,7 @@ export default function Profile() {
       id: localStorage.getItem('id')
     };
     axios
-      .put('https://reservegourmetsnackbackend.onrender.com/users', newUser, {
+      .put(process.env.NEXT_PUBLIC_API_URL+ 'users', newUser, {
         headers: {
           Authorization: localStorage.getItem('token')
         }

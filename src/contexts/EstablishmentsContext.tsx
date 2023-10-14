@@ -44,7 +44,7 @@ export function EstablishmentsContextProvider({
 
   async function fetchData() {
     try {
-      const response = await axios.get('https://reservegourmetsnackbackend.onrender.com/establishments', {
+      const response = await axios.get(process.env.NEXT_PUBLIC_API_URL+ 'establishments', {
         headers: {
           Authorization: localStorage.getItem('token')
         }

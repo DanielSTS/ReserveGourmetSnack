@@ -114,7 +114,7 @@ export default function MyReserves() {
       observation: editedReservation.observation
     };
     axios
-      .put('https://reservegourmetsnackbackend.onrender.com/reservations', data, {
+      .put(process.env.NEXT_PUBLIC_API_URL+ 'reservations', data, {
         headers: {
           Authorization: localStorage.getItem('token')
         }
@@ -144,7 +144,7 @@ export default function MyReserves() {
 
   function handleDeleteConfirm(): void {
     axios
-      .delete('https://reservegourmetsnackbackend.onrender.com/reservations', {
+      .delete(process.env.NEXT_PUBLIC_API_URL+ 'reservations', {
         headers: {
           Authorization: localStorage.getItem('token')
         },
@@ -178,7 +178,7 @@ export default function MyReserves() {
       comment
     };
     axios
-      .post('https://reservegourmetsnackbackend.onrender.com/comments', data, {
+      .post(process.env.NEXT_PUBLIC_API_URL+ 'comments', data, {
         headers: {
           Authorization: localStorage.getItem('token')
         }

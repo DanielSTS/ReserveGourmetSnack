@@ -56,7 +56,7 @@ export default function Establishments() {
       observation
     };
     axios
-      .post('https://reservegourmetsnackbackend.onrender.com/reservations', data, {
+      .post(process.env.NEXT_PUBLIC_API_URL+ 'reservations', data, {
         headers: {
           Authorization: localStorage.getItem('token')
         }
@@ -89,7 +89,8 @@ export default function Establishments() {
     setOpenReviewHistory(true);
   };
 
-  const handleConfirmReview = () => {
+  const handleConfirmReview = (event: any) => {
+     event.preventDefault();
     const data = {
       userId: localStorage.getItem('id'),
       establishmentId: selectedRow.id,
@@ -97,7 +98,7 @@ export default function Establishments() {
       comment
     };
     axios
-      .post('https://reservegourmetsnackbackend.onrender.com/reviews', data, {
+      .post(process.env.NEXT_PUBLIC_API_URL+ 'reviews', data, {
         headers: {
           Authorization: localStorage.getItem('token')
         }
@@ -255,7 +256,7 @@ export default function Establishments() {
         <div className="fixed inset-0 flex items-center justify-center">
           <div className="p-4 bg-white rounded shadow  text-center flex flex-col gap-12">
             <h1 className="text-redMain text-2xl">Avaliar</h1>
-            <form className="flex flex-col gap-6 items-center">
+            <form className="flex flex-col gap-6 items-center" onSubmit={handleConfirmReview}>
               <Select
                 className="w-full text-left"
                 variant="outlined"
@@ -287,7 +288,7 @@ export default function Establishments() {
                 Cancelar
               </button>
               <button
-                onClick={handleConfirmReview}
+                type="submit"
                 className="border-2 border-white bg-redMain text-white font-bold p-2 px-8 rounded-3xl focus:outline-none focus:shadow-outline"
               >
                 Enviar

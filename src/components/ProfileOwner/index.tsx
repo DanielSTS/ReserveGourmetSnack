@@ -70,7 +70,7 @@ export default function ProfileOwner() {
       enabled
     };
     axios
-      .put('https://reservegourmetsnackbackend.onrender.com/establishments', data, {
+      .put(process.env.NEXT_PUBLIC_API_URL+ 'establishments', data, {
         headers: {
           Authorization: localStorage.getItem('token')
         }
@@ -220,7 +220,8 @@ export default function ProfileOwner() {
         />
         <AlertMessage
           open={errorOpen}
-          severity={errorMessage}
+          severity="error"
+          message={errorMessage}
           onClose={handleErrorClose}
         />
       </section>
