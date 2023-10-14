@@ -40,11 +40,16 @@ export default function Profile() {
       id: localStorage.getItem('id')
     };
     axios
-      .put(process.env.NEXT_PUBLIC_API_URL  ?? "https://reservegourmetsnackbackend.onrender.com/"+ 'users', newUser, {
-        headers: {
-          Authorization: localStorage.getItem('token')
+      .put(
+        (process.env.NEXT_PUBLIC_API_URL ??
+          'https://reservegourmetsnackbackend.onrender.com/') + 'users',
+        newUser,
+        {
+          headers: {
+            Authorization: localStorage.getItem('token')
+          }
         }
-      })
+      )
       .then(() => {
         handleSuccessOpen('Dados atualizados com sucesso!');
         router.push('/user/home');

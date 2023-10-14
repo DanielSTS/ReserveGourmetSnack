@@ -70,7 +70,9 @@ export function OwnerInfoContextProvider({
     if (ownerId) {
       try {
         const response = await axios.get(
-          process.env.NEXT_PUBLIC_API_URL  ?? "https://reservegourmetsnackbackend.onrender.com/"+ `owners/${ownerId}`,
+          (process.env.NEXT_PUBLIC_API_URL ??
+            'https://reservegourmetsnackbackend.onrender.com/') +
+            `owners/${ownerId}`,
           {
             headers: {
               Authorization: localStorage.getItem('token')

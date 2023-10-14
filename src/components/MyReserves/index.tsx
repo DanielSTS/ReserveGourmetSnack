@@ -114,11 +114,16 @@ export default function MyReserves() {
       observation: editedReservation.observation
     };
     axios
-      .put(process.env.NEXT_PUBLIC_API_URL  ?? "https://reservegourmetsnackbackend.onrender.com/"+ 'reservations', data, {
-        headers: {
-          Authorization: localStorage.getItem('token')
+      .put(
+        (process.env.NEXT_PUBLIC_API_URL ??
+          'https://reservegourmetsnackbackend.onrender.com/') + 'reservations',
+        data,
+        {
+          headers: {
+            Authorization: localStorage.getItem('token')
+          }
         }
-      })
+      )
       .then(() => {
         handleSuccessOpen('Edição confirmada!');
       })
@@ -144,14 +149,18 @@ export default function MyReserves() {
 
   function handleDeleteConfirm(): void {
     axios
-      .delete(process.env.NEXT_PUBLIC_API_URL  ?? "https://reservegourmetsnackbackend.onrender.com/"+ 'reservations', {
-        headers: {
-          Authorization: localStorage.getItem('token')
-        },
-        data: {
-          id: selectedRow.id
+      .delete(
+        (process.env.NEXT_PUBLIC_API_URL ??
+          'https://reservegourmetsnackbackend.onrender.com/') + 'reservations',
+        {
+          headers: {
+            Authorization: localStorage.getItem('token')
+          },
+          data: {
+            id: selectedRow.id
+          }
         }
-      })
+      )
       .then(() => {
         handleSuccessOpen('Reserva cancelada!');
       })
@@ -178,11 +187,16 @@ export default function MyReserves() {
       comment
     };
     axios
-      .post(process.env.NEXT_PUBLIC_API_URL  ?? "https://reservegourmetsnackbackend.onrender.com/"+ 'comments', data, {
-        headers: {
-          Authorization: localStorage.getItem('token')
+      .post(
+        (process.env.NEXT_PUBLIC_API_URL ??
+          'https://reservegourmetsnackbackend.onrender.com/') + 'comments',
+        data,
+        {
+          headers: {
+            Authorization: localStorage.getItem('token')
+          }
         }
-      })
+      )
       .then(() => {
         handleSuccessOpen('Avaliação enviada!');
       })

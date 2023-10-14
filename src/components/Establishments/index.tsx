@@ -56,11 +56,16 @@ export default function Establishments() {
       observation
     };
     axios
-      .post(process.env.NEXT_PUBLIC_API_URL  ?? "https://reservegourmetsnackbackend.onrender.com/"+ 'reservations', data, {
-        headers: {
-          Authorization: localStorage.getItem('token')
+      .post(
+        (process.env.NEXT_PUBLIC_API_URL ??
+          'https://reservegourmetsnackbackend.onrender.com/') + 'reservations',
+        data,
+        {
+          headers: {
+            Authorization: localStorage.getItem('token')
+          }
         }
-      })
+      )
       .then(() => {
         handleSuccessOpen('Reserva confirmada!');
       })
@@ -90,7 +95,7 @@ export default function Establishments() {
   };
 
   const handleConfirmReview = (event: any) => {
-     event.preventDefault();
+    event.preventDefault();
     const data = {
       userId: localStorage.getItem('id'),
       establishmentId: selectedRow.id,
@@ -98,11 +103,16 @@ export default function Establishments() {
       comment
     };
     axios
-      .post(process.env.NEXT_PUBLIC_API_URL  ?? "https://reservegourmetsnackbackend.onrender.com/"+ 'reviews', data, {
-        headers: {
-          Authorization: localStorage.getItem('token')
+      .post(
+        (process.env.NEXT_PUBLIC_API_URL ??
+          'https://reservegourmetsnackbackend.onrender.com/') + 'reviews',
+        data,
+        {
+          headers: {
+            Authorization: localStorage.getItem('token')
+          }
         }
-      })
+      )
       .then(() => {
         handleSuccessOpen('Avaliação enviada!');
       })
@@ -256,7 +266,10 @@ export default function Establishments() {
         <div className="fixed inset-0 flex items-center justify-center">
           <div className="p-4 bg-white rounded shadow  text-center flex flex-col gap-12">
             <h1 className="text-redMain text-2xl">Avaliar</h1>
-            <form className="flex flex-col gap-6 items-center" onSubmit={handleConfirmReview}>
+            <form
+              className="flex flex-col gap-6 items-center"
+              onSubmit={handleConfirmReview}
+            >
               <Select
                 className="w-full text-left"
                 variant="outlined"

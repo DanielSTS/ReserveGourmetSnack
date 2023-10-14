@@ -44,11 +44,16 @@ export function EstablishmentsContextProvider({
 
   async function fetchData() {
     try {
-      const response = await axios.get(process.env.NEXT_PUBLIC_API_URL  ?? "https://reservegourmetsnackbackend.onrender.com/"+ 'establishments', {
-        headers: {
-          Authorization: localStorage.getItem('token')
+      const response = await axios.get(
+        (process.env.NEXT_PUBLIC_API_URL ??
+          'https://reservegourmetsnackbackend.onrender.com/') +
+          'establishments',
+        {
+          headers: {
+            Authorization: localStorage.getItem('token')
+          }
         }
-      });
+      );
       const data = response.data as EstablishmentData[];
       console.log(data);
       setEstablishmentsData(data);
